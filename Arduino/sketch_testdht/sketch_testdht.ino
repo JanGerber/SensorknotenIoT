@@ -71,9 +71,9 @@ void setup() {
   radio.setAutoAck(1); 
   radio.setDataRate(RF24_250KBPS); //250kbs
   radio.setPALevel(RF24_PA_MAX);
-  radio.setChannel(70);
+  radio.setChannel(110);
   radio.setRetries(15,15);
-  radio.setCRCLength(RF24_CRC_8);
+  radio.setCRCLength(RF24_CRC_16);
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1,pipes[1]);
 
@@ -125,21 +125,21 @@ void sendOverRadio(){
   if(!isnan(temperatur)){
     t_sensorData.value = temperatur;
     t_sensorData.unit = 1;
-    t_sensorData.crc = calcCRC(t_sensorData);
+    //t_sensorData.crc = calcCRC(t_sensorData);
     sendData(t_sensorData);
   }
   delay(8);
   if(!isnan(humidity)){
     t_sensorData.value = humidity;
     t_sensorData.unit = 2;
-    t_sensorData.crc = calcCRC(t_sensorData);
+    //t_sensorData.crc = calcCRC(t_sensorData);
     sendData(t_sensorData);
   }
   delay(8);
   if(!isnan(pressure)){
     t_sensorData.value = pressure;
     t_sensorData.unit = 3;
-    t_sensorData.crc = calcCRC(t_sensorData);
+   // t_sensorData.crc = calcCRC(t_sensorData);
     sendData(t_sensorData);
   }
   radio.powerDown();
@@ -158,7 +158,7 @@ void serielleAusgabe(){
     Serial.print(pressure);
     Serial.println(" hPa");
 }
-
+/*
 int calcCRC(sensorData t_sensorData){
   crcData t_crcData;
 
@@ -169,7 +169,7 @@ int calcCRC(sensorData t_sensorData){
   return CRC16.ccitt((uint8_t)t_crcData, sizeof(t_crcData));
 }
 
-
+*/
 
 
 
