@@ -42,7 +42,7 @@
     int id;
     float value;
     int unit;
-    int crc;
+    unsigned long timeId;
   };
 
 
@@ -65,12 +65,13 @@ void setup() {
   radio.setAutoAck(1); 
   radio.setDataRate(RF24_250KBPS); //250kbs
   radio.setPALevel(RF24_PA_MAX);
-  radio.setChannel(79);
+ // radio.setChannel(90);
   radio.setRetries(15,15);
   radio.setCRCLength(RF24_CRC_16);
   radio.openWritingPipe(pipes[1]);
   radio.openReadingPipe(0,pipes[0]);
 
+  Serial.println(radio.getChannel());
 
   radio.startListening();
 
@@ -93,8 +94,8 @@ void loop() {
         Serial.print("Unit: ");
         Serial.print(t_sensorData.unit);// Get the payload
         Serial.print(" \t");
-        Serial.print("CRC: ");
-        Serial.println(t_sensorData.crc);// Get the payload
+        Serial.print("TimeId: ");
+        Serial.println(t_sensorData.timeId);// Get the payload
       }
       Serial.println("------------------------------------");
     }

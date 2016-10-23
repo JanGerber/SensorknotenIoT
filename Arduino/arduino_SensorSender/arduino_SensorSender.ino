@@ -7,7 +7,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#include <FastCRC.h>
+#include <LowPower.h>
 
 //Konstanten und Variablen
 
@@ -32,26 +32,17 @@
   const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0x7365727631LL };
    
   char receivePayload[32];
-  uint8_t counter=0;
+  unsigned long timeId;
 
-  //Checksum
-
-  FastCRC16 CRC16;
 
   //
   struct sensorData{
     int id;
     float value;
     int unit;
-    int crc;
+    unsigned long timeId;
   };
-
-  struct crcData{
-    int id;
-    float value;
-    int unit;
-  }; 
-
+  
 void setup() {
   Serial.begin(9600);  
   
@@ -71,21 +62,42 @@ void setup() {
   radio.setAutoAck(1); 
   radio.setDataRate(RF24_250KBPS); //250kbs
   radio.setPALevel(RF24_PA_MAX);
-  radio.setChannel(110);
+ // radio.setChannel(95);
   radio.setRetries(15,15);
   radio.setCRCLength(RF24_CRC_16);
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1,pipes[1]);
 
+  Serial.println(radio.getChannel());
+
+  timeId = 0;
 }
 
 void loop() {
+
+  long start;
+  long dauer;
+
+
+    start = millis();
    getTemperatureHumidty();
    getPressure();
    getLuminosity();  
    sendOverRadio();
+
+   dauer = millis() - start;
+   Serial.print("Dauer: ");
+   Serial.print(dauer);
+   Serial.println(" ms");
    serielleAusgabe();
-   delay(10000);
+   delay(100);
+
+   for(int i = 0; i < 2; i++)
+   {
+     LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+   }
+   
+   
 }
 
 void getTemperatureHumidty(){  
@@ -104,42 +116,42 @@ void getLuminosity(){
 }
 
 void sendData(sensorData t_sensorData) {
-    
-  for(int retry = 0; retry <= 50; retry++){
+  int attempts  = 0;
+  for(int retry = 0; retry <= 100; retry++){
    if (radio.write( &t_sensorData, sizeof(t_sensorData) )){
        Serial.print("Break:");
-       Serial.println(t_sensorData.unit);
+       Serial.print(t_sensorData.unit);
        break; 
    }
-   Serial.println(F("failed.")); 
+   attempts++;
 }
-
+  Serial.print(" \tAttempts: ");
+  Serial.println(attempts);
+  
 }
 
 void sendOverRadio(){
  radio.powerUp(); 
- 
+  
+  
   sensorData t_sensorData;
+  timeId++;
+  t_sensorData.timeId = timeId;
   t_sensorData.id = arduinoId;
   
   if(!isnan(temperatur)){
     t_sensorData.value = temperatur;
     t_sensorData.unit = 1;
-    //t_sensorData.crc = calcCRC(t_sensorData);
     sendData(t_sensorData);
   }
-  delay(8);
   if(!isnan(humidity)){
     t_sensorData.value = humidity;
     t_sensorData.unit = 2;
-    //t_sensorData.crc = calcCRC(t_sensorData);
     sendData(t_sensorData);
   }
-  delay(8);
   if(!isnan(pressure)){
     t_sensorData.value = pressure;
     t_sensorData.unit = 3;
-   // t_sensorData.crc = calcCRC(t_sensorData);
     sendData(t_sensorData);
   }
   radio.powerDown();
@@ -156,20 +168,12 @@ void serielleAusgabe(){
     Serial.print(" C\t");
     Serial.print("Pressure: ");
     Serial.print(pressure);
-    Serial.println(" hPa");
-}
-/*
-int calcCRC(sensorData t_sensorData){
-  crcData t_crcData;
-
-  t_crcData.id = t_sensorData.id;
-  t_crcData.value = t_sensorData.value;
-  t_crcData.unit = t_sensorData.unit;
-
-  return CRC16.ccitt((uint8_t)t_crcData, sizeof(t_crcData));
+    Serial.print(" hPa\t");
+    Serial.print(" TimeId: ");
+    Serial.println(timeId);
+    
 }
 
-*/
 
 
 
