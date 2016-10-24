@@ -8,6 +8,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <LowPower.h>
+#include <EEPROM.h>
 
 //Konstanten und Variablen
 
@@ -33,6 +34,7 @@
    
   char receivePayload[32];
   unsigned long timeId;
+  long addressTimeId;
 
 
   //
@@ -62,7 +64,7 @@ void setup() {
   radio.setAutoAck(1); 
   radio.setDataRate(RF24_250KBPS); //250kbs
   radio.setPALevel(RF24_PA_MAX);
- // radio.setChannel(95);
+  radio.setChannel(90);
   radio.setRetries(15,15);
   radio.setCRCLength(RF24_CRC_16);
   radio.openWritingPipe(pipes[0]);
@@ -70,7 +72,8 @@ void setup() {
 
   Serial.println(radio.getChannel());
 
-  timeId = 0;
+  addressTimeId = 1;
+  timeId = EEPROMReadlong(addressTimeId);
 }
 
 void loop() {
@@ -117,12 +120,13 @@ void getLuminosity(){
 
 void sendData(sensorData t_sensorData) {
   int attempts  = 0;
-  for(int retry = 0; retry <= 100; retry++){
+  for(int retry = 0; retry <= 60; retry++){
    if (radio.write( &t_sensorData, sizeof(t_sensorData) )){
        Serial.print("Break:");
        Serial.print(t_sensorData.unit);
        break; 
    }
+   delayMicroseconds(130);
    attempts++;
 }
   Serial.print(" \tAttempts: ");
@@ -136,6 +140,7 @@ void sendOverRadio(){
   
   sensorData t_sensorData;
   timeId++;
+  EEPROMWritelong(addressTimeId, timeId);
   t_sensorData.timeId = timeId;
   t_sensorData.id = arduinoId;
   
@@ -144,11 +149,13 @@ void sendOverRadio(){
     t_sensorData.unit = 1;
     sendData(t_sensorData);
   }
+  delay(3);
   if(!isnan(humidity)){
     t_sensorData.value = humidity;
     t_sensorData.unit = 2;
     sendData(t_sensorData);
   }
+  delay(3);
   if(!isnan(pressure)){
     t_sensorData.value = pressure;
     t_sensorData.unit = 3;
@@ -157,6 +164,32 @@ void sendOverRadio(){
   radio.powerDown();
 }
 
+void EEPROMWritelong(int address, long value){
+      //Decomposition from a long to 4 bytes by using bitshift.
+      //One = Most significant -> Four = Least significant byte
+      byte four = (value & 0xFF);
+      byte three = ((value >> 8) & 0xFF);
+      byte two = ((value >> 16) & 0xFF);
+      byte one = ((value >> 24) & 0xFF);
+
+      //Write the 4 bytes into the eeprom memory.
+      EEPROM.write(address, four);
+      EEPROM.write(address + 1, three);
+      EEPROM.write(address + 2, two);
+      EEPROM.write(address + 3, one);
+}
+
+long EEPROMReadlong(long address)
+{
+      //Read the 4 bytes from the eeprom memory.
+      long four = EEPROM.read(address);
+      long three = EEPROM.read(address + 1);
+      long two = EEPROM.read(address + 2);
+      long one = EEPROM.read(address + 3);
+
+      //Return the recomposed long by using bitshift.
+      return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
+}
 
 
 void serielleAusgabe(){

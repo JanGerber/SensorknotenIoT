@@ -65,7 +65,7 @@ void setup() {
   radio.setAutoAck(1); 
   radio.setDataRate(RF24_250KBPS); //250kbs
   radio.setPALevel(RF24_PA_MAX);
- // radio.setChannel(90);
+  radio.setChannel(90);
   radio.setRetries(15,15);
   radio.setCRCLength(RF24_CRC_16);
   radio.openWritingPipe(pipes[1]);
