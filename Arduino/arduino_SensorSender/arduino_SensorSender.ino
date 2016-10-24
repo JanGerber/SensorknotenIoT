@@ -9,6 +9,7 @@
 #include <RF24.h>
 #include <LowPower.h>
 #include <EEPROM.h>
+#include <AES.h>
 
 //Konstanten und Variablen
 
@@ -36,7 +37,11 @@
   unsigned long timeId;
   long addressTimeId;
 
+  //Verschluesselung AES
+  AES aes;
+  byte key[] = "01234567899876543210012345678998";
 
+  
   //
   struct sensorData{
     int id;
@@ -82,7 +87,7 @@ void loop() {
   long dauer;
 
 
-    start = millis();
+   start = millis();
    getTemperatureHumidty();
    getPressure();
    getLuminosity();  
@@ -147,6 +152,8 @@ void sendOverRadio(){
   if(!isnan(temperatur)){
     t_sensorData.value = temperatur;
     t_sensorData.unit = 1;
+    ausgabeSensorData(t_sensorData);
+    ausgabeSensorData(verschluessleData(t_sensorData));
     sendData(t_sensorData);
   }
   delay(3);
@@ -191,6 +198,15 @@ long EEPROMReadlong(long address)
       return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
 }
 
+sensorData verschluessleData(sensorData  data){
+  unsigned long long int my_iv = 01234567;
+  byte cipher[sizeof(data)];
+  byte plain[sizeof(data)];
+  memcpy(&plain, &data, sizeof(data));
+  aes.do_aes_encrypt(plain ,sizeof(data),cipher,key,128);
+  memcpy(&data, &cipher, sizeof(data));     
+  return data;
+}
 
 void serielleAusgabe(){
     Serial.print("Luftfeuchte: ");
@@ -206,6 +222,25 @@ void serielleAusgabe(){
     Serial.println(timeId);
     
 }
+
+
+void ausgabeSensorData(sensorData t_sensorData){
+        Serial.print("ID: ");
+        Serial.print(t_sensorData.id);
+        Serial.print(" \t");
+        Serial.print("Value: ");
+        Serial.print(t_sensorData.value);
+        Serial.print(" \t");
+        Serial.print("Unit: ");
+        Serial.print(t_sensorData.unit);// Get the payload
+        Serial.print(" \t");
+        Serial.print("TimeId: ");
+        Serial.println(t_sensorData.timeId);// Get the payload
+}
+
+
+
+
 
 
 
