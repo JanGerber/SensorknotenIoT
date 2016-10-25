@@ -39,8 +39,11 @@
 
   //Verschluesselung AES
   AES aes;
-  byte key[] = "01234567899876543210012345678998";
-
+  byte *key = (unsigned char*)"0123456789010123";
+  unsigned long long int my_iv = 36753562;
+  byte plain[] = "Add NodeAdd NodeAdd NodeAdd NodeAdd Node";
+  byte cipher [48] ;
+  
   
   //
   struct sensorData{
@@ -48,6 +51,10 @@
     float value;
     int unit;
     unsigned long timeId;
+  };
+
+  struct secureMessage{
+    byte message [sizeof(sensorData) + (N_BLOCK - (sizeof(sensorData) % 16)) - 1];
   };
   
 void setup() {
@@ -63,9 +70,10 @@ void setup() {
     Serial.println("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
   }
 
+  Serial.println("init Radio");
   //nRF24L01
   radio.begin();
-  radio.setPayloadSize(sizeof(sensorData));  //Groesse der gesendeten Daten
+  radio.setPayloadSize(sizeof(secureMessage));  //Groesse der gesendeten Daten
   radio.setAutoAck(1); 
   radio.setDataRate(RF24_250KBPS); //250kbs
   radio.setPALevel(RF24_PA_MAX);
@@ -100,7 +108,7 @@ void loop() {
    serielleAusgabe();
    delay(100);
 
-   for(int i = 0; i < 2; i++)
+   for(int i = 0; i < 8; i++)
    {
      LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
    }
@@ -124,9 +132,12 @@ void getLuminosity(){
 }
 
 void sendData(sensorData t_sensorData) {
+  secureMessage message;
+  message = verschluessleData(t_sensorData);
+
   int attempts  = 0;
   for(int retry = 0; retry <= 60; retry++){
-   if (radio.write( &t_sensorData, sizeof(t_sensorData) )){
+   if (radio.write( &message, sizeof(message) )){
        Serial.print("Break:");
        Serial.print(t_sensorData.unit);
        break; 
@@ -152,10 +163,9 @@ void sendOverRadio(){
   if(!isnan(temperatur)){
     t_sensorData.value = temperatur;
     t_sensorData.unit = 1;
-    ausgabeSensorData(t_sensorData);
-    ausgabeSensorData(verschluessleData(t_sensorData));
     sendData(t_sensorData);
   }
+  /*
   delay(3);
   if(!isnan(humidity)){
     t_sensorData.value = humidity;
@@ -167,7 +177,7 @@ void sendOverRadio(){
     t_sensorData.value = pressure;
     t_sensorData.unit = 3;
     sendData(t_sensorData);
-  }
+  }*/
   radio.powerDown();
 }
 
@@ -198,14 +208,26 @@ long EEPROMReadlong(long address)
       return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
 }
 
-sensorData verschluessleData(sensorData  data){
-  unsigned long long int my_iv = 01234567;
-  byte cipher[sizeof(data)];
+secureMessage verschluessleData(sensorData  data){
+  secureMessage message;
+  byte iv [N_BLOCK] ;
   byte plain[sizeof(data)];
-  memcpy(&plain, &data, sizeof(data));
-  aes.do_aes_encrypt(plain ,sizeof(data),cipher,key,128);
-  memcpy(&data, &cipher, sizeof(data));     
-  return data;
+  byte cipher[sizeof(data) + (N_BLOCK - (sizeof(plain) % 16)) - 1]; 
+  aes.set_IV(my_iv);
+  aes.get_IV(iv);
+  memcpy(&plain, &data, sizeof(data));  
+  Serial.print("IV: ");
+  for(int i = 0; i < sizeof(iv);i++){
+    Serial.print(iv[i],HEX);
+  }
+  Serial.println();
+  aes.do_aes_encrypt(plain ,sizeof(plain),message.message,key,128,iv);  
+  Serial.print("Message.message: ");
+  for(int i = 0; i < sizeof(message.message);i++){
+    Serial.print(message.message[i],HEX);
+  }
+  Serial.println();
+  return message;
 }
 
 void serielleAusgabe(){
