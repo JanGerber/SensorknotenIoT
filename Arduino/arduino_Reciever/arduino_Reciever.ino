@@ -119,20 +119,40 @@ sensorData entschluessleData(secureMessage  message){
   }
   Serial.println();
   
-  byte plain[sizeof(sensorData) + (N_BLOCK - (sizeof(sensorData) % 16)) - 1];
+  byte plain [sizeof(sensorData)];//[sizeof(sensorData) + (N_BLOCK - (sizeof(sensorData) % 16)) - 1];
   sensorData data;
   
   byte iv [N_BLOCK] ;
   aes.set_IV(my_iv);
   aes.get_IV(iv);
-  Serial.print("IV: ");
-  for(int i = 0; i < sizeof(iv);i++){
-    Serial.print(iv[i],HEX);
+
+  Serial.print("Plain: ");
+  for(int i = 0; i < sizeof(plain);i++){
+    Serial.print(plain[i],HEX);
   }
   Serial.println();
-  aes.do_aes_decrypt(message.message ,sizeof(message.message),plain,key,128,iv); 
+
+
+  
+  //aes.do_aes_encrypt(message.message ,sizeof(message.message),plain,key,128,iv); 
+
+  
+
+  aes.do_aes_decrypt(message.message ,sizeof(sensorData),plain,key,128,iv); 
+
+  Serial.print("Plain: ");
+  for(int i = 0; i < sizeof(plain);i++){
+    Serial.print(plain[i],HEX);
+  }
+  Serial.println();
+  
+   Serial.print("Message.message: ");
+  for(int i = 0; i < sizeof(message.message);i++){
+    Serial.print(message.message[i],HEX);
+  }
+  Serial.println();
   memcpy(&data, &plain, sizeof(data)); 
- 
+  
    
   return data;
 }

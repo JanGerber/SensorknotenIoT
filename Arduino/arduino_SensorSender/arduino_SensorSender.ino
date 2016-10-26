@@ -216,9 +216,10 @@ secureMessage verschluessleData(sensorData  data){
   aes.set_IV(my_iv);
   aes.get_IV(iv);
   memcpy(&plain, &data, sizeof(data));  
-  Serial.print("IV: ");
-  for(int i = 0; i < sizeof(iv);i++){
-    Serial.print(iv[i],HEX);
+  
+  Serial.print("Plain: ");
+  for(int i = 0; i < sizeof(plain);i++){
+    Serial.print(plain[i],HEX);
   }
   Serial.println();
   aes.do_aes_encrypt(plain ,sizeof(plain),message.message,key,128,iv);  
