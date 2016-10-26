@@ -1,4 +1,7 @@
 
+
+
+
 //Libraries
 #include <DHT.h>       //Temperatur und Luftfeuchtigkeit
 #include <Wire.h>
@@ -7,7 +10,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#include <AES.h>
+#include <AESLib.h>
 
 //Konstanten und Variablen
 
@@ -33,10 +36,9 @@
    
   char receivePayload[32];
   uint8_t counter=0;
+  
   //Verschluesselung AES
-  AES aes;
- byte *key = (unsigned char*)"0123456789010123";
- unsigned long long int my_iv = 36753562;
+  uint8_t key[] = {'A',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 
 
   //
@@ -48,7 +50,7 @@
   };
   
   struct secureMessage{
-    byte message [sizeof(sensorData) + (N_BLOCK - (sizeof(sensorData) % 16)) - 1];
+    byte message [16];
   };
 
 
@@ -117,42 +119,15 @@ sensorData entschluessleData(secureMessage  message){
   for(int i = 0; i < sizeof(message.message);i++){
     Serial.print(message.message[i],HEX);
   }
-  Serial.println();
-  
-  byte plain [sizeof(sensorData)];//[sizeof(sensorData) + (N_BLOCK - (sizeof(sensorData) % 16)) - 1];
+  Serial.println(); 
   sensorData data;
-  
-  byte iv [N_BLOCK] ;
-  aes.set_IV(my_iv);
-  aes.get_IV(iv);
-
-  Serial.print("Plain: ");
-  for(int i = 0; i < sizeof(plain);i++){
-    Serial.print(plain[i],HEX);
-  }
-  Serial.println();
-
-
-  
-  //aes.do_aes_encrypt(message.message ,sizeof(message.message),plain,key,128,iv); 
-
-  
-
-  aes.do_aes_decrypt(message.message ,sizeof(sensorData),plain,key,128,iv); 
-
-  Serial.print("Plain: ");
-  for(int i = 0; i < sizeof(plain);i++){
-    Serial.print(plain[i],HEX);
-  }
-  Serial.println();
-  
-   Serial.print("Message.message: ");
+  aes128_dec_single(key, message.message);
+  Serial.print("Message.message: ");
   for(int i = 0; i < sizeof(message.message);i++){
     Serial.print(message.message[i],HEX);
   }
-  Serial.println();
-  memcpy(&data, &plain, sizeof(data)); 
-  
+  Serial.println(); 
+  memcpy(&data, &message.message, sizeof(data)); 
    
   return data;
 }

@@ -9,7 +9,7 @@
 #include <RF24.h>
 #include <LowPower.h>
 #include <EEPROM.h>
-#include <AES.h>
+#include <AESLib.h>
 
 //Konstanten und Variablen
 
@@ -38,11 +38,7 @@
   long addressTimeId;
 
   //Verschluesselung AES
-  AES aes;
-  byte *key = (unsigned char*)"0123456789010123";
-  unsigned long long int my_iv = 36753562;
-  byte plain[] = "Add NodeAdd NodeAdd NodeAdd NodeAdd Node";
-  byte cipher [48] ;
+  uint8_t key[] = {'A',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
   
   
   //
@@ -54,7 +50,7 @@
   };
 
   struct secureMessage{
-    byte message [sizeof(sensorData) + (N_BLOCK - (sizeof(sensorData) % 16)) - 1];
+    byte message [16];
   };
   
 void setup() {
@@ -165,7 +161,6 @@ void sendOverRadio(){
     t_sensorData.unit = 1;
     sendData(t_sensorData);
   }
-  /*
   delay(3);
   if(!isnan(humidity)){
     t_sensorData.value = humidity;
@@ -177,7 +172,7 @@ void sendOverRadio(){
     t_sensorData.value = pressure;
     t_sensorData.unit = 3;
     sendData(t_sensorData);
-  }*/
+  }
   radio.powerDown();
 }
 
@@ -210,24 +205,8 @@ long EEPROMReadlong(long address)
 
 secureMessage verschluessleData(sensorData  data){
   secureMessage message;
-  byte iv [N_BLOCK] ;
-  byte plain[sizeof(data)];
-  byte cipher[sizeof(data) + (N_BLOCK - (sizeof(plain) % 16)) - 1]; 
-  aes.set_IV(my_iv);
-  aes.get_IV(iv);
-  memcpy(&plain, &data, sizeof(data));  
-  
-  Serial.print("Plain: ");
-  for(int i = 0; i < sizeof(plain);i++){
-    Serial.print(plain[i],HEX);
-  }
-  Serial.println();
-  aes.do_aes_encrypt(plain ,sizeof(plain),message.message,key,128,iv);  
-  Serial.print("Message.message: ");
-  for(int i = 0; i < sizeof(message.message);i++){
-    Serial.print(message.message[i],HEX);
-  }
-  Serial.println();
+  memcpy(&message.message, &data, sizeof(data));  
+  aes128_enc_single(key, message.message);
   return message;
 }
 
