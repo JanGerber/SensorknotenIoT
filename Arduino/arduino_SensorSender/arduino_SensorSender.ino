@@ -18,7 +18,7 @@
   
 
   //DHT22
-  #define DHTPIN 2     // what pin we're connected to
+  #define DHTPIN 4     // what pin we're connected to
   #define DHTTYPE DHT22   // DHT 22  (AM2302)
   DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
   float humidity;
@@ -104,7 +104,7 @@ void loop() {
    serielleAusgabe();
    delay(100);
 
-   for(int i = 0; i < 8; i++)
+   for(int i = 0; i < 4; i++)
    {
      LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
    }

@@ -115,20 +115,9 @@ void loop() {
 
 
 sensorData entschluessleData(secureMessage  message){
-  Serial.print("Message.message: ");
-  for(int i = 0; i < sizeof(message.message);i++){
-    Serial.print(message.message[i],HEX);
-  }
-  Serial.println(); 
   sensorData data;
   aes128_dec_single(key, message.message);
-  Serial.print("Message.message: ");
-  for(int i = 0; i < sizeof(message.message);i++){
-    Serial.print(message.message[i],HEX);
-  }
-  Serial.println(); 
   memcpy(&data, &message.message, sizeof(data)); 
-   
   return data;
 }
 
