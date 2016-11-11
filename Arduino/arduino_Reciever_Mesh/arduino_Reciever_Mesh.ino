@@ -1,87 +1,124 @@
-/** RF24Mesh_Example.ino by TMRh20
-   This example sketch shows how to manually configure a node via RF24Mesh, and send data to the
-   master node.
-   The nodes will refresh their network address as soon as a single write fails. This allows the
-   nodes to change position in relation to each other and the master node.
-*/
-
-
-#include "RF24.h"
+//Libraries
+#include <SPI.h>             
+#include <RF24.h>            //Allgemeine Libary für NRF24L01+
+#include <AESLib.h>          //Verschlüsselungsalgorithmen
 #include "RF24Network.h"
 #include "RF24Mesh.h"
-#include <SPI.h>
-//#include <printf.h>
+//Include eeprom.h for AVR (Uno, Nano) etc. except ATTiny
+#include <EEPROM.h>
+
+//Konstanten und Variablen
+
+  // NRF24L01+ Pinbelegung
+  RF24 radio(9,10);
+  RF24Network network(radio);
+  RF24Mesh mesh(radio,network);
+  
+  //Verschlüsselungskey für AES
+  uint8_t key[] = {'A',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 
 
-/**** Configure the nrf24l01 CE and CS pins ****/
-RF24 radio(9, 10);
-RF24Network network(radio);
-RF24Mesh mesh(radio, network);
+  //Übermittelte Daten eines Sensors
+  struct sensorData{
+    int id;
+    float value;
+    int unit;
+    unsigned long timeId;
+  };
 
-/**
-   User Configuration: nodeID - A unique identifier for each radio. Allows addressing
-   to change dynamically with physical changes to the mesh.
-   In this example, configuration takes place below, prior to uploading the sketch to the device
-   A unique value from 1-255 must be configured for each node.
-   This will be stored in EEPROM on AVR devices, so remains persistent between further uploads, loss of power, etc.
- **/
-#define nodeID 1
+  //Verschlüsselte Nachricht
+  struct secureMessage{
+    byte message [16];
+  };
 
+  uint32_t displayTimer = 0;
 
-uint32_t displayTimer = 0;
-
-struct payload_t {
-  unsigned long ms;
-  unsigned long counter;
-};
-
+  
 void setup() {
+  Serial.begin(9600);  
+  
+  Serial.println("Reciever");
 
-  Serial.begin(115200);
-  //printf_begin();
-  // Set the nodeID manually
-  mesh.setNodeID(nodeID);
-  // Connect to the mesh
-  Serial.println(F("Connecting to the mesh..."));
-  mesh.begin();
+  //nRF24L01
+
+    mesh.setNodeID(0);
+    mesh.begin();
+//    radio.setDataRate(RF24_250KBPS);              //250kbs
+//    radio.setPALevel(RF24_PA_MAX);
+//    radio.setChannel(90);
+//    radio.setRetries(15,15);
+//    radio.setCRCLength(RF24_CRC_16); //Cyclic redundancy check
+
 }
-
-
 
 void loop() {
+    
+    sensorData t_sensorData;
+    secureMessage t_message;
 
-  mesh.update();
+    mesh.update();
+    mesh.DHCP();
 
-  // Send to the master node every second
-  if (millis() - displayTimer >= 1000) {
-    displayTimer = millis();
-
-    // Send an 'M' type message containing the current millis()
-    if (!mesh.write(&displayTimer, 'M', sizeof(displayTimer))) {
-
-      // If a write fails, check connectivity to the mesh network
-      if ( ! mesh.checkConnection() ) {
-        //refresh the network address
-        Serial.println("Renewing Address");
-        mesh.renewAddress();
-      } else {
-        Serial.println("Send fail, Test OK");
-      }
-    } else {
-      Serial.print("Send OK: "); Serial.println(displayTimer);
-    }
-  }
-
-  while (network.available()) {
+    if(network.available()){
+      
     RF24NetworkHeader header;
-    payload_t payload;
-    network.read(header, &payload, sizeof(payload));
-    Serial.print("Received packet #");
-    Serial.print(payload.counter);
-    Serial.print(" at ");
-    Serial.println(payload.ms);
-  }
+    network.peek(header);
+    
+    switch(header.type){
+      case 'M':
+          network.read(header,&t_message,sizeof(t_message));
+          t_sensorData = entschluessleData(t_message);
+          ausgabeData(t_sensorData);
+          break;
+      default:
+          network.read(header,0,0);
+          Serial.println(header.type);
+          break;
+    }
 }
+    if(millis() - displayTimer > 5000){
+    displayTimer = millis();
+    Serial.println(" ");
+    Serial.println(F("********Assigned Addresses********"));
+     for(int i=0; i<mesh.addrListTop; i++){
+       Serial.print("NodeID: ");
+       Serial.print(mesh.addrList[i].nodeID);
+       Serial.print(" RF24Network Address: 0");
+       Serial.println(mesh.addrList[i].address,OCT);
+     }
+    Serial.println(F("**********************************"));
+}
+    
+}
+
+
+sensorData entschluessleData(secureMessage  message){
+  sensorData data;
+  aes128_dec_single(key, message.message);
+  memcpy(&data, &message.message, sizeof(data)); 
+  return data;
+}
+
+void ausgabeData(sensorData t_sensorData){
+        Serial.print("ID: ");
+        Serial.print(t_sensorData.id);
+        Serial.print(" \t");
+        Serial.print("Value: ");
+        Serial.print(t_sensorData.value);
+        Serial.print(" \t");
+        Serial.print("Unit: ");
+        Serial.print(t_sensorData.unit);// Get the payload
+        Serial.print(" \t");
+        Serial.print("TimeId: ");
+        Serial.println(t_sensorData.timeId);// Get the payload 
+}
+
+
+
+
+
+
+
 
 
 

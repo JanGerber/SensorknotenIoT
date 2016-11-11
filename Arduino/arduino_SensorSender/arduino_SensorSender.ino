@@ -10,6 +10,7 @@
 #include <LowPower.h>
 #include <EEPROM.h>
 #include <AESLib.h>
+#include <math.h>
 
 //Konstanten und Variablen
 
@@ -160,18 +161,21 @@ void sendOverRadio(){
     t_sensorData.value = temperatur;
     t_sensorData.unit = 1;
     sendData(t_sensorData);
+    temperatur = NAN;
   }
   delay(3);
   if(!isnan(humidity)){
     t_sensorData.value = humidity;
     t_sensorData.unit = 2;
     sendData(t_sensorData);
+    humidity = NAN;
   }
   delay(3);
   if(!isnan(pressure)){
     t_sensorData.value = pressure;
     t_sensorData.unit = 3;
     sendData(t_sensorData);
+    pressure = NAN;
   }
   radio.powerDown();
 }
