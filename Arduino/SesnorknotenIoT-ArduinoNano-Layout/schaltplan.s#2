@@ -4662,39 +4662,39 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </class>
 </classes>
 <parts>
-<part name="M1" library="diy-modules" deviceset="ARDUINO-NANO-3.0#ISP" device=""/>
-<part name="M2" library="diy-modules" deviceset="WIRELESS-NRF24L01" device=""/>
-<part name="U$1" library="diy-modules" deviceset="MOTION-PIR-DYP-ME003" device=""/>
-<part name="U1" library="RHT03_DHT-22_AM2302" deviceset="RHT03_DHT-22_AM2302" device=""/>
+<part name="ARDUINO-NANO" library="diy-modules" deviceset="ARDUINO-NANO-3.0#ISP" device="" value=""/>
+<part name="NRF24L01+" library="diy-modules" deviceset="WIRELESS-NRF24L01" device="" value=""/>
+<part name="MOTION-PIR" library="diy-modules" deviceset="MOTION-PIR-DYP-ME003" device="" value=""/>
+<part name="DHT22" library="RHT03_DHT-22_AM2302" deviceset="RHT03_DHT-22_AM2302" device=""/>
 <part name="R1" library="resistor" deviceset="R-EU_" device="0207/10" value="10k"/>
-<part name="BATTERIE" library="pinhead" deviceset="PINHD-1X2" device="" value="6V"/>
+<part name="BATTERIE" library="pinhead" deviceset="PINHD-1X2" device=""/>
 <part name="BMP180" library="pinhead" deviceset="PINHD-1X5" device=""/>
 <part name="BH1750" library="pinhead" deviceset="PINHD-1X5" device=""/>
 <part name="REED-SCHALTER" library="pinhead" deviceset="PINHD-1X2" device=""/>
-<part name="SOIL-MOISTURE" library="pinhead" deviceset="PINHD-1X4" device=""/>
+<part name="BODEN-FEUCHT" library="pinhead" deviceset="PINHD-1X4" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 </plain>
 <instances>
-<instance part="M1" gate="G$1" x="60.96" y="48.26"/>
-<instance part="M2" gate="G$1" x="-35.56" y="38.1" rot="R180"/>
-<instance part="U$1" gate="G$1" x="-30.48" y="83.82" rot="R90"/>
-<instance part="U1" gate="G$1" x="172.72" y="78.74"/>
+<instance part="ARDUINO-NANO" gate="G$1" x="60.96" y="48.26"/>
+<instance part="NRF24L01+" gate="G$1" x="-35.56" y="38.1" rot="R180"/>
+<instance part="MOTION-PIR" gate="G$1" x="-30.48" y="83.82" rot="R90"/>
+<instance part="DHT22" gate="G$1" x="172.72" y="78.74"/>
 <instance part="R1" gate="G$1" x="147.32" y="86.36" rot="R90"/>
 <instance part="BATTERIE" gate="G$1" x="63.5" y="116.84" rot="R90"/>
 <instance part="BMP180" gate="A" x="165.1" y="17.78"/>
 <instance part="BH1750" gate="A" x="165.1" y="45.72"/>
 <instance part="REED-SCHALTER" gate="G$1" x="-33.02" y="60.96" rot="R180"/>
-<instance part="SOIL-MOISTURE" gate="A" x="132.08" y="116.84" rot="R90"/>
+<instance part="BODEN-FEUCHT" gate="A" x="132.08" y="116.84" rot="R90"/>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="3.3V" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="3V3"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="3V3"/>
 <wire x1="78.74" y1="33.02" x2="83.82" y2="33.02" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="33.02" x2="129.54" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="R1" gate="G$1" pin="2"/>
@@ -4704,13 +4704,13 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="137.16" y1="91.44" x2="147.32" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="147.32" y1="91.44" x2="157.48" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="157.48" y1="91.44" x2="157.48" y2="86.36" width="0.1524" layer="91"/>
-<pinref part="U1" gate="G$1" pin="VDD"/>
+<pinref part="DHT22" gate="G$1" pin="VDD"/>
 <wire x1="157.48" y1="86.36" x2="162.56" y2="86.36" width="0.1524" layer="91"/>
 <junction x="147.32" y="91.44"/>
 <wire x1="83.82" y1="33.02" x2="83.82" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="2.54" x2="-5.08" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="2.54" x2="-5.08" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="M2" gate="G$1" pin="VCC"/>
+<pinref part="NRF24L01+" gate="G$1" pin="VCC"/>
 <wire x1="-5.08" y1="30.48" x2="-7.62" y2="30.48" width="0.1524" layer="91"/>
 <junction x="-12.7" y="30.48"/>
 <junction x="78.74" y="33.02"/>
@@ -4731,7 +4731,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="-7.62" y1="58.42" x2="-7.62" y2="30.48" width="0.1524" layer="91"/>
 <junction x="-30.48" y="58.42"/>
 <junction x="-7.62" y="30.48"/>
-<pinref part="SOIL-MOISTURE" gate="A" pin="4"/>
+<pinref part="BODEN-FEUCHT" gate="A" pin="4"/>
 <wire x1="134.62" y1="114.3" x2="134.62" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="134.62" y1="96.52" x2="137.16" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="96.52" x2="137.16" y2="91.44" width="0.1524" layer="91"/>
@@ -4740,14 +4740,14 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="N$1" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="D4"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D4"/>
 <wire x1="40.64" y1="50.8" x2="17.78" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="50.8" x2="17.78" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="99.06" x2="116.84" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="99.06" x2="116.84" y2="81.28" width="0.1524" layer="91"/>
 <pinref part="R1" gate="G$1" pin="1"/>
 <wire x1="116.84" y1="81.28" x2="147.32" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="U1" gate="G$1" pin="DATA"/>
+<pinref part="DHT22" gate="G$1" pin="DATA"/>
 <wire x1="147.32" y1="81.28" x2="162.56" y2="81.28" width="0.1524" layer="91"/>
 <junction x="147.32" y="81.28"/>
 <junction x="40.64" y="50.8"/>
@@ -4756,7 +4756,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="GND" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="GND.2"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="GND.2"/>
 <wire x1="78.74" y1="63.5" x2="83.82" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="63.5" x2="88.9" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="88.9" y1="63.5" x2="132.08" y2="63.5" width="0.1524" layer="91"/>
@@ -4766,7 +4766,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="154.94" y1="63.5" x2="160.02" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="160.02" y1="63.5" x2="160.02" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="160.02" y1="71.12" x2="162.56" y2="71.12" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="GND"/>
+<pinref part="MOTION-PIR" gate="G$1" pin="GND"/>
 <wire x1="162.56" y1="71.12" x2="165.1" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="-10.16" y1="81.28" x2="10.16" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="10.16" y1="81.28" x2="35.56" y2="81.28" width="0.1524" layer="91"/>
@@ -4774,7 +4774,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="35.56" y1="91.44" x2="83.82" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="91.44" x2="83.82" y2="63.5" width="0.1524" layer="91"/>
 <junction x="83.82" y="63.5"/>
-<pinref part="M2" gate="G$1" pin="GND"/>
+<pinref part="NRF24L01+" gate="G$1" pin="GND"/>
 <wire x1="-12.7" y1="27.94" x2="10.16" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="10.16" y1="27.94" x2="10.16" y2="81.28" width="0.1524" layer="91"/>
 <junction x="10.16" y="81.28"/>
@@ -4791,11 +4791,11 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="142.24" y1="15.24" x2="142.24" y2="63.5" width="0.1524" layer="91"/>
 <junction x="142.24" y="63.5"/>
 <junction x="162.56" y="15.24"/>
-<pinref part="U1" gate="G$1" pin="GND"/>
+<pinref part="DHT22" gate="G$1" pin="GND"/>
 <junction x="162.56" y="71.12"/>
 <junction x="63.5" y="114.3"/>
 <wire x1="35.56" y1="81.28" x2="35.56" y2="58.42" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="GND.1"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="GND.1"/>
 <wire x1="35.56" y1="58.42" x2="40.64" y2="58.42" width="0.1524" layer="91"/>
 <junction x="40.64" y="58.42"/>
 <junction x="35.56" y="81.28"/>
@@ -4808,7 +4808,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="162.56" y1="50.8" x2="154.94" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="154.94" y1="50.8" x2="154.94" y2="63.5" width="0.1524" layer="91"/>
 <junction x="154.94" y="63.5"/>
-<pinref part="SOIL-MOISTURE" gate="A" pin="3"/>
+<pinref part="BODEN-FEUCHT" gate="A" pin="3"/>
 <wire x1="132.08" y1="114.3" x2="132.08" y2="63.5" width="0.1524" layer="91"/>
 <junction x="132.08" y="114.3"/>
 <junction x="132.08" y="63.5"/>
@@ -4816,12 +4816,12 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="5V" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="5V"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="5V"/>
 <wire x1="78.74" y1="58.42" x2="93.98" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="58.42" x2="93.98" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="96.52" x2="2.54" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="2.54" y1="96.52" x2="2.54" y2="86.36" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="VCC"/>
+<pinref part="MOTION-PIR" gate="G$1" pin="VCC"/>
 <wire x1="2.54" y1="86.36" x2="-10.16" y2="86.36" width="0.1524" layer="91"/>
 <junction x="-10.16" y="86.36"/>
 <junction x="78.74" y="58.42"/>
@@ -4829,10 +4829,10 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="N$8" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="D3"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D3"/>
 <wire x1="40.64" y1="53.34" x2="22.86" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="22.86" y1="53.34" x2="22.86" y2="83.82" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="OUT"/>
+<pinref part="MOTION-PIR" gate="G$1" pin="OUT"/>
 <wire x1="22.86" y1="83.82" x2="-10.16" y2="83.82" width="0.1524" layer="91"/>
 <junction x="-10.16" y="83.82"/>
 <junction x="40.64" y="53.34"/>
@@ -4840,11 +4840,11 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="SCK" class="0">
 <segment>
-<pinref part="M2" gate="G$1" pin="SCK"/>
+<pinref part="NRF24L01+" gate="G$1" pin="SCK"/>
 <wire x1="-12.7" y1="38.1" x2="17.78" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="38.1" x2="17.78" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="5.08" x2="78.74" y2="5.08" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="D13/SCK"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D13/SCK"/>
 <wire x1="78.74" y1="5.08" x2="78.74" y2="30.48" width="0.1524" layer="91"/>
 <junction x="-12.7" y="38.1"/>
 <junction x="78.74" y="30.48"/>
@@ -4852,10 +4852,10 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="N$9" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="D9"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D9"/>
 <wire x1="40.64" y1="38.1" x2="25.4" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="25.4" y1="38.1" x2="25.4" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="M2" gate="G$1" pin="CE"/>
+<pinref part="NRF24L01+" gate="G$1" pin="CE"/>
 <wire x1="25.4" y1="33.02" x2="-12.7" y2="33.02" width="0.1524" layer="91"/>
 <junction x="-12.7" y="33.02"/>
 <junction x="40.64" y="38.1"/>
@@ -4863,8 +4863,8 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="N$10" class="0">
 <segment>
-<pinref part="M2" gate="G$1" pin="CSN"/>
-<pinref part="M1" gate="G$1" pin="D10"/>
+<pinref part="NRF24L01+" gate="G$1" pin="CSN"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D10"/>
 <wire x1="-12.7" y1="35.56" x2="40.64" y2="35.56" width="0.1524" layer="91"/>
 <junction x="-12.7" y="35.56"/>
 <junction x="40.64" y="35.56"/>
@@ -4872,10 +4872,10 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="MOSI" class="0">
 <segment>
-<pinref part="M2" gate="G$1" pin="MOSI"/>
+<pinref part="NRF24L01+" gate="G$1" pin="MOSI"/>
 <wire x1="-12.7" y1="40.64" x2="33.02" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="40.64" x2="33.02" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="D11/MOSI"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D11/MOSI"/>
 <wire x1="33.02" y1="33.02" x2="40.64" y2="33.02" width="0.1524" layer="91"/>
 <junction x="-12.7" y="40.64"/>
 <junction x="40.64" y="33.02"/>
@@ -4883,10 +4883,10 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="MISO" class="0">
 <segment>
-<pinref part="M2" gate="G$1" pin="MISO"/>
+<pinref part="NRF24L01+" gate="G$1" pin="MISO"/>
 <wire x1="-12.7" y1="43.18" x2="27.94" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="27.94" y1="43.18" x2="27.94" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="D12/MISO"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D12/MISO"/>
 <wire x1="27.94" y1="30.48" x2="40.64" y2="30.48" width="0.1524" layer="91"/>
 <junction x="-12.7" y="43.18"/>
 <junction x="40.64" y="30.48"/>
@@ -4898,7 +4898,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="60.96" y1="114.3" x2="60.96" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="101.6" x2="81.28" y2="101.6" width="0.1524" layer="91"/>
 <wire x1="81.28" y1="101.6" x2="81.28" y2="66.04" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="VIN"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="VIN"/>
 <wire x1="81.28" y1="66.04" x2="78.74" y2="66.04" width="0.1524" layer="91"/>
 <junction x="78.74" y="66.04"/>
 <junction x="60.96" y="114.3"/>
@@ -4909,7 +4909,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="BMP180" gate="A" pin="2"/>
 <wire x1="162.56" y1="20.32" x2="91.44" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="91.44" y1="20.32" x2="91.44" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="A4"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="A4"/>
 <wire x1="91.44" y1="48.26" x2="78.74" y2="48.26" width="0.1524" layer="91"/>
 <junction x="162.56" y="20.32"/>
 <junction x="78.74" y="48.26"/>
@@ -4924,7 +4924,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="BMP180" gate="A" pin="3"/>
 <wire x1="162.56" y1="17.78" x2="93.98" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="17.78" x2="93.98" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="A5"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="A5"/>
 <wire x1="93.98" y1="45.72" x2="93.98" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="50.8" x2="78.74" y2="50.8" width="0.1524" layer="91"/>
 <junction x="162.56" y="17.78"/>
@@ -4937,7 +4937,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="N$2" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="D2"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D2"/>
 <wire x1="40.64" y1="55.88" x2="-5.08" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="-5.08" y1="55.88" x2="-5.08" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="REED-SCHALTER" gate="G$1" pin="2"/>
@@ -4948,8 +4948,8 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="N$3" class="0">
 <segment>
-<pinref part="M1" gate="G$1" pin="A6"/>
-<pinref part="SOIL-MOISTURE" gate="A" pin="1"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="A6"/>
+<pinref part="BODEN-FEUCHT" gate="A" pin="1"/>
 <wire x1="78.74" y1="53.34" x2="127" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="127" y1="53.34" x2="127" y2="114.3" width="0.1524" layer="91"/>
 <junction x="127" y="114.3"/>
@@ -4958,11 +4958,11 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </net>
 <net name="N$4" class="0">
 <segment>
-<pinref part="SOIL-MOISTURE" gate="A" pin="2"/>
+<pinref part="BODEN-FEUCHT" gate="A" pin="2"/>
 <wire x1="129.54" y1="114.3" x2="129.54" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="93.98" x2="30.48" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="93.98" x2="30.48" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="M1" gate="G$1" pin="D5"/>
+<pinref part="ARDUINO-NANO" gate="G$1" pin="D5"/>
 <wire x1="30.48" y1="48.26" x2="40.64" y2="48.26" width="0.1524" layer="91"/>
 <junction x="40.64" y="48.26"/>
 <junction x="129.54" y="114.3"/>

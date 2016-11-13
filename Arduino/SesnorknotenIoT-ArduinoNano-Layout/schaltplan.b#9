@@ -22,25 +22,25 @@
 <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
-<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
-<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
-<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
-<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
-<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
-<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
-<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="yes" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="yes" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="yes" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="yes" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="yes" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
-<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
@@ -111,6 +111,38 @@
 <wire x1="68.25" y1="0" x2="68.25" y2="69.84" width="0" layer="20"/>
 <wire x1="68.25" y1="69.84" x2="0" y2="69.84" width="0" layer="20"/>
 <wire x1="0" y1="69.84" x2="0" y2="0" width="0" layer="20"/>
+<text x="49.53" y="21.59" size="1.016" layer="21" align="center-left">GND</text>
+<text x="49.53" y="19.05" size="1.016" layer="21" align="center-left">DATA</text>
+<text x="49.53" y="16.51" size="1.016" layer="21" align="center-left">5 V</text>
+<text x="48.26" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
+<text x="24.13" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
+<text x="3.81" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
+<text x="6.35" y="24.13" size="1.016" layer="21" align="center-left">3.3 V</text>
+<text x="26.67" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">GND</text>
+<text x="6.35" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">GND</text>
+<text x="6.35" y="21.59" size="1.016" layer="21" align="center-left">GND</text>
+<text x="45.72" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">DATA</text>
+<text x="29.21" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SCL</text>
+<text x="31.75" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SDA</text>
+<text x="34.29" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">ADD</text>
+<text x="13.97" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">ADD</text>
+<text x="11.43" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SDA</text>
+<text x="8.89" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SCL</text>
+<text x="6.35" y="19.05" size="1.016" layer="21" align="center-left">DO</text>
+<text x="6.35" y="16.51" size="1.016" layer="21" align="center-left">AO</text>
+<text x="8.89" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">GND</text>
+<text x="13.97" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">DATA</text>
+<text x="16.51" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">3.3 V</text>
+<text x="11.43" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">NULL</text>
+<text x="44.45" y="64.77" size="1.016" layer="21" align="center-left">3.3 V</text>
+<text x="33.02" y="64.77" size="1.016" layer="21" align="center-left">GND</text>
+<text x="33.02" y="59.69" size="1.016" layer="21" align="center-left">SCK</text>
+<text x="33.02" y="57.15" size="1.016" layer="21" align="center-left">MISO</text>
+<text x="44.45" y="59.69" size="1.016" layer="21" align="center-left">MOSI</text>
+<text x="33.02" y="62.23" size="1.016" layer="21" align="center-left">CE</text>
+<text x="44.45" y="62.23" size="1.016" layer="21" align="center-left">CSN</text>
+<text x="8.89" y="12.7" size="3.81" layer="21" align="center-left">SensorknotenIoT</text>
+<text x="58.42" y="13.97" size="1.27" layer="21" rot="R90" align="center-left">MOTION-PIR</text>
 </plain>
 <libraries>
 <library name="pinhead">
@@ -1780,7 +1812,7 @@ design rules under a new name.</description>
 <param name="mtIsolate" value="1.5mm 1.1mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm"/>
 <param name="mdWireWire" value="12mil"/>
 <param name="mdWirePad" value="12mil"/>
-<param name="mdWireVia" value="6mil"/>
+<param name="mdWireVia" value="12mil"/>
 <param name="mdPadPad" value="6mil"/>
 <param name="mdPadVia" value="6mil"/>
 <param name="mdViaVia" value="6mil"/>
@@ -1940,226 +1972,135 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="BATTERIE" library="pinhead" package="1X02" value="6V" x="60.96" y="41.91"/>
+<element name="BATTERIE" library="pinhead" package="1X02" value="6V" x="60.96" y="41.91" rot="R90"/>
 <element name="BMP180" library="pinhead" package="1X05" value="" x="8.89" y="3.81" rot="R180"/>
-<element name="M1" library="diy-modules" package="ARDUINO-NANO-3.0#ISP" value="ARDUINO-NANO-3.0#ISP" x="27.94" y="40.64"/>
-<element name="M2" library="diy-modules" package="WIRELESS-NRF24L01" value="WIRELESS-NRF24L01" x="71.12" y="57.15"/>
-<element name="R1" library="resistor" package="0207/10" value="10k" x="13.97" y="55.88"/>
-<element name="U$1" library="diy-modules" package="MOTION-PIR-DYP-ME003" value="MOTION-PIR-DYP-ME003" x="68.58" y="19.05" rot="R270"/>
-<element name="U1" library="RHT03_DHT-22_AM2302" package="RHT03_DHT-22" value="" x="12.7" y="67.31" rot="R180">
-<attribute name="PROD_ID" value="SEN-10167" x="12.7" y="67.31" size="1.778" layer="27" rot="R180" display="off"/>
+<element name="ARDUINO-NANO" library="diy-modules" package="ARDUINO-NANO-3.0#ISP" value="" x="27.94" y="36.83"/>
+<element name="NRF24L01+" library="diy-modules" package="WIRELESS-NRF24L01" value="" x="52.07" y="58.42"/>
+<element name="R1" library="resistor" package="0207/10" value="10k" x="13.97" y="53.34"/>
+<element name="MOTION-PIR" library="diy-modules" package="MOTION-PIR-DYP-ME003" value="" x="66.04" y="19.05" rot="R270"/>
+<element name="DHT22" library="RHT03_DHT-22_AM2302" package="RHT03_DHT-22" value="" x="12.7" y="64.77" rot="R180">
+<attribute name="PROD_ID" value="SEN-10167" x="12.7" y="64.77" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
 <element name="BH1750" library="pinhead" package="1X05" value="" x="29.21" y="3.81" rot="R180"/>
-<element name="REED-SCHALTER" library="pinhead" package="1X02" value="" x="45.72" y="3.81"/>
-<element name="SOIL-MOISTURE" library="pinhead" package="1X04" value="" x="5.08" y="20.32" rot="R90"/>
+<element name="REED-SCHALTER" library="pinhead" package="1X02" value="" x="46.99" y="3.81" rot="R180"/>
+<element name="BODEN-FEUCHT" library="pinhead" package="1X04" value="" x="3.81" y="20.32" rot="R90"/>
 </elements>
 <signals>
 <signal name="3.3V">
-<contactref element="M1" pad="J2.14"/>
+<contactref element="ARDUINO-NANO" pad="J2.14"/>
 <contactref element="R1" pad="2"/>
-<contactref element="U1" pad="VDD"/>
-<contactref element="M2" pad="2"/>
+<contactref element="DHT22" pad="VDD"/>
+<contactref element="NRF24L01+" pad="2"/>
 <contactref element="BMP180" pad="5"/>
 <contactref element="BH1750" pad="5"/>
 <contactref element="REED-SCHALTER" pad="1"/>
-<contactref element="SOIL-MOISTURE" pad="4"/>
-<wire x1="16.51" y1="67.31" x2="60.96" y2="63.5" width="0" layer="19" extent="1-1"/>
-<wire x1="19.05" y1="55.88" x2="16.51" y2="67.31" width="0" layer="19" extent="1-1"/>
-<wire x1="12.7" y1="33.02" x2="19.05" y2="55.88" width="0" layer="19" extent="1-1"/>
-<wire x1="5.08" y1="24.13" x2="12.7" y2="33.02" width="0" layer="19" extent="1-1"/>
-<wire x1="3.81" y1="3.81" x2="5.08" y2="24.13" width="0" layer="19" extent="1-1"/>
+<contactref element="BODEN-FEUCHT" pad="4"/>
+<wire x1="19.05" y1="53.34" x2="41.91" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="16.51" y1="64.77" x2="19.05" y2="53.34" width="0" layer="19" extent="1-1"/>
+<wire x1="12.7" y1="29.21" x2="19.05" y2="53.34" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="24.13" x2="12.7" y2="29.21" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="3.81" x2="3.81" y2="24.13" width="0" layer="19" extent="1-1"/>
 <wire x1="24.13" y1="3.81" x2="3.81" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="44.45" y1="3.81" x2="24.13" y2="3.81" width="0" layer="19" extent="1-1"/>
+<wire x1="48.26" y1="3.81" x2="24.13" y2="3.81" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$1">
-<contactref element="M1" pad="J1.7"/>
+<contactref element="ARDUINO-NANO" pad="J1.7"/>
 <contactref element="R1" pad="1"/>
-<contactref element="U1" pad="DATA"/>
-<wire x1="8.89" y1="55.88" x2="30.48" y2="48.26" width="0" layer="19" extent="1-1"/>
-<wire x1="13.97" y1="67.31" x2="8.89" y2="55.88" width="0" layer="19" extent="1-1"/>
+<contactref element="DHT22" pad="DATA"/>
+<wire x1="8.89" y1="53.34" x2="30.48" y2="44.45" width="0" layer="19" extent="1-1"/>
+<wire x1="13.97" y1="64.77" x2="8.89" y2="53.34" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND">
-<contactref element="M1" pad="J2.2"/>
-<contactref element="U$1" pad="1"/>
-<contactref element="M2" pad="1"/>
+<contactref element="ARDUINO-NANO" pad="J2.2"/>
+<contactref element="MOTION-PIR" pad="1"/>
+<contactref element="NRF24L01+" pad="1"/>
 <contactref element="BATTERIE" pad="2"/>
 <contactref element="BMP180" pad="4"/>
-<contactref element="U1" pad="GND"/>
-<contactref element="M1" pad="J1.4"/>
+<contactref element="DHT22" pad="GND"/>
+<contactref element="ARDUINO-NANO" pad="J1.4"/>
 <contactref element="BH1750" pad="4"/>
 <contactref element="BH1750" pad="1"/>
-<contactref element="SOIL-MOISTURE" pad="3"/>
-<wire x1="38.1" y1="48.26" x2="58.42" y2="63.5" width="0" layer="19" extent="1-1"/>
-<wire x1="43.18" y1="33.02" x2="38.1" y2="48.26" width="0" layer="19" extent="1-1"/>
-<wire x1="62.23" y1="41.91" x2="43.18" y2="33.02" width="0" layer="19" extent="1-1"/>
-<wire x1="58.42" y1="21.59" x2="43.18" y2="33.02" width="0" layer="19" extent="1-1"/>
-<wire x1="34.29" y1="3.81" x2="58.42" y2="21.59" width="0" layer="19" extent="1-1"/>
+<contactref element="BODEN-FEUCHT" pad="3"/>
+<wire x1="60.96" y1="43.18" x2="39.37" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="43.18" y1="29.21" x2="60.96" y2="43.18" width="0" layer="19" extent="1-1"/>
+<wire x1="38.1" y1="44.45" x2="43.18" y2="29.21" width="0" layer="19" extent="1-1"/>
+<wire x1="55.88" y1="21.59" x2="43.18" y2="29.21" width="0" layer="19" extent="1-1"/>
+<wire x1="34.29" y1="3.81" x2="55.88" y2="21.59" width="0" layer="19" extent="1-1"/>
 <wire x1="26.67" y1="3.81" x2="34.29" y2="3.81" width="0" layer="19" extent="1-1"/>
 <wire x1="6.35" y1="3.81" x2="26.67" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="5.08" y1="21.59" x2="6.35" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="8.89" y1="67.31" x2="38.1" y2="48.26" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="21.59" x2="6.35" y2="3.81" width="0" layer="19" extent="1-1"/>
+<wire x1="8.89" y1="64.77" x2="38.1" y2="44.45" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="5V">
-<contactref element="M1" pad="J2.4"/>
-<contactref element="U$1" pad="3"/>
-<wire x1="58.42" y1="16.51" x2="38.1" y2="33.02" width="0" layer="19" extent="1-1"/>
+<contactref element="ARDUINO-NANO" pad="J2.4"/>
+<contactref element="MOTION-PIR" pad="3"/>
+<wire x1="55.88" y1="16.51" x2="38.1" y2="29.21" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$8">
-<contactref element="M1" pad="J1.6"/>
-<contactref element="U$1" pad="2"/>
-<wire x1="58.42" y1="19.05" x2="33.02" y2="48.26" width="0" layer="19" extent="1-1"/>
+<contactref element="ARDUINO-NANO" pad="J1.6"/>
+<contactref element="MOTION-PIR" pad="2"/>
+<wire x1="55.88" y1="19.05" x2="33.02" y2="44.45" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SCK">
-<contactref element="M2" pad="5"/>
-<contactref element="M1" pad="J2.15"/>
-<wire x1="10.16" y1="33.02" x2="58.42" y2="58.42" width="0" layer="19" extent="1-1"/>
+<contactref element="NRF24L01+" pad="5"/>
+<contactref element="ARDUINO-NANO" pad="J2.15"/>
+<wire x1="10.16" y1="29.21" x2="39.37" y2="59.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$9">
-<contactref element="M1" pad="J1.12"/>
-<contactref element="M2" pad="3"/>
-<wire x1="17.78" y1="48.26" x2="58.42" y2="60.96" width="0" layer="19" extent="1-1"/>
+<contactref element="ARDUINO-NANO" pad="J1.12"/>
+<contactref element="NRF24L01+" pad="3"/>
+<wire x1="17.78" y1="44.45" x2="39.37" y2="62.23" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$10">
-<contactref element="M2" pad="4"/>
-<contactref element="M1" pad="J1.13"/>
-<wire x1="15.24" y1="48.26" x2="60.96" y2="60.96" width="0" layer="19" extent="1-1"/>
+<contactref element="NRF24L01+" pad="4"/>
+<contactref element="ARDUINO-NANO" pad="J1.13"/>
+<wire x1="15.24" y1="44.45" x2="41.91" y2="62.23" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MOSI">
-<contactref element="M2" pad="6"/>
-<contactref element="M1" pad="J1.14"/>
-<wire x1="12.7" y1="48.26" x2="60.96" y2="58.42" width="0" layer="19" extent="1-1"/>
+<contactref element="NRF24L01+" pad="6"/>
+<contactref element="ARDUINO-NANO" pad="J1.14"/>
+<wire x1="12.7" y1="44.45" x2="41.91" y2="59.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MISO">
-<contactref element="M2" pad="7"/>
-<contactref element="M1" pad="J1.15"/>
-<wire x1="10.16" y1="48.26" x2="58.42" y2="55.88" width="0" layer="19" extent="1-1"/>
+<contactref element="NRF24L01+" pad="7"/>
+<contactref element="ARDUINO-NANO" pad="J1.15"/>
+<wire x1="10.16" y1="44.45" x2="39.37" y2="57.15" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$13">
 <contactref element="BATTERIE" pad="1"/>
-<contactref element="M1" pad="J2.1"/>
-<wire x1="45.72" y1="33.02" x2="59.69" y2="41.91" width="0" layer="19" extent="1-1"/>
+<contactref element="ARDUINO-NANO" pad="J2.1"/>
+<wire x1="45.72" y1="29.21" x2="60.96" y2="40.64" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SDA">
 <contactref element="BMP180" pad="2"/>
-<contactref element="M1" pad="J2.8"/>
+<contactref element="ARDUINO-NANO" pad="J2.8"/>
 <contactref element="BH1750" pad="2"/>
-<wire x1="31.75" y1="3.81" x2="27.94" y2="33.02" width="0" layer="19" extent="1-1"/>
+<wire x1="31.75" y1="3.81" x2="27.94" y2="29.21" width="0" layer="19" extent="1-1"/>
 <wire x1="11.43" y1="3.81" x2="31.75" y2="3.81" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SCL">
 <contactref element="BMP180" pad="3"/>
-<contactref element="M1" pad="J2.7"/>
+<contactref element="ARDUINO-NANO" pad="J2.7"/>
 <contactref element="BH1750" pad="3"/>
-<wire x1="29.21" y1="3.81" x2="30.48" y2="33.02" width="0" layer="19" extent="1-1"/>
+<wire x1="29.21" y1="3.81" x2="30.48" y2="29.21" width="0" layer="19" extent="1-1"/>
 <wire x1="8.89" y1="3.81" x2="29.21" y2="3.81" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$2">
-<contactref element="M1" pad="J1.5"/>
+<contactref element="ARDUINO-NANO" pad="J1.5"/>
 <contactref element="REED-SCHALTER" pad="2"/>
-<wire x1="46.99" y1="3.81" x2="35.56" y2="48.26" width="0" layer="19" extent="1-1"/>
+<wire x1="45.72" y1="3.81" x2="35.56" y2="44.45" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$3">
-<contactref element="M1" pad="J2.6"/>
-<contactref element="SOIL-MOISTURE" pad="1"/>
-<wire x1="5.08" y1="16.51" x2="33.02" y2="33.02" width="0" layer="19" extent="1-1"/>
+<contactref element="ARDUINO-NANO" pad="J2.6"/>
+<contactref element="BODEN-FEUCHT" pad="1"/>
+<wire x1="3.81" y1="16.51" x2="33.02" y2="29.21" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$4">
-<contactref element="SOIL-MOISTURE" pad="2"/>
-<contactref element="M1" pad="J1.8"/>
-<wire x1="5.08" y1="19.05" x2="27.94" y2="48.26" width="0" layer="19" extent="1-1"/>
+<contactref element="BODEN-FEUCHT" pad="2"/>
+<contactref element="ARDUINO-NANO" pad="J1.8"/>
+<wire x1="3.81" y1="19.05" x2="27.94" y2="44.45" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
-<errors>
-<approved hash="2,20,2c6a4e7a4dc82fd8"/>
-<approved hash="2,20,21ae43be42b020a0"/>
-<approved hash="2,20,0bce3fde3cbc08ac"/>
-<approved hash="2,20,05983188344c005c"/>
-<approved hash="2,20,045830480d8c399c"/>
-<approved hash="2,20,d05e624e623bd02b"/>
-<approved hash="2,20,5023a0339df06de0"/>
-<approved hash="2,20,5fb5afa5acc05cd0"/>
-<approved hash="2,20,51e3a1f3a4305420"/>
-<approved hash="2,20,dc2000303df9e1e9"/>
-<approved hash="2,20,d3b60fa60cc9d0d9"/>
-<approved hash="2,20,dde001f00439d829"/>
-<approved hash="4,1,dc2000303df9e1e9"/>
-<approved hash="4,1,dde001f00439d829"/>
-<approved hash="4,1,d3b60fa60cc9d0d9"/>
-<approved hash="4,1,64d03ac024207a30"/>
-<approved hash="4,1,e02050306df1dde1"/>
-<approved hash="4,1,e1e051f05431e421"/>
-<approved hash="4,1,7de061f064287838"/>
-<approved hash="4,1,7c2060305de841f8"/>
-<approved hash="4,1,d85e7a4e7a3fd82f"/>
-<approved hash="4,1,7023c033fdf44de4"/>
-<approved hash="4,1,71e3c1f3c4347424"/>
-<approved hash="4,1,f05e424e423ff02f"/>
-<approved hash="4,16,2c6a4e7a4dc82fd8"/>
-<approved hash="4,16,21ae43be42b020a0"/>
-<approved hash="4,16,2c2e4e3e4e702c60"/>
-<approved hash="4,16,2c524e424de02ff0"/>
-<approved hash="4,16,285a4a4a4a382828"/>
-<approved hash="4,16,305e224e223c302c"/>
-<approved hash="4,16,285bae4bae382828"/>
-<approved hash="4,16,2cd5aac5b4243234"/>
-<approved hash="4,16,2fb66fa66cd82cc8"/>
-<approved hash="4,16,d85e1e4e1e33d823"/>
-<approved hash="4,16,05983188344c005c"/>
-<approved hash="4,16,045830480d8c399c"/>
-<approved hash="4,16,0bce3fde3cbc08ac"/>
-<approved hash="4,16,d05e624e623bd02b"/>
-<approved hash="4,16,5023a0339df06de0"/>
-<approved hash="4,16,51e3a1f3a4305420"/>
-<approved hash="4,16,5fb5afa5acc05cd0"/>
-<approved hash="4,16,dc2000303df9e1e9"/>
-<approved hash="4,16,dde001f00439d829"/>
-<approved hash="4,16,d3b60fa60cc9d0d9"/>
-<approved hash="4,16,64d03ac024207a30"/>
-<approved hash="4,16,e02050306df1dde1"/>
-<approved hash="4,16,e1e051f05431e421"/>
-<approved hash="4,16,7de061f064287838"/>
-<approved hash="4,16,7c2060305de841f8"/>
-<approved hash="4,16,d85e7a4e7a3fd82f"/>
-<approved hash="4,16,7023c033fdf44de4"/>
-<approved hash="4,16,71e3c1f3c4347424"/>
-<approved hash="4,16,f05e424e423ff02f"/>
-<approved hash="4,16,45eff1fff4384028"/>
-<approved hash="4,16,442ff03fcdf879e8"/>
-<approved hash="4,16,f85d9e4d9e20f830"/>
-<approved hash="4,16,a02040307df19de1"/>
-<approved hash="4,16,a1e041f04431a421"/>
-<approved hash="4,16,685fce4fce3c682c"/>
-<approved hash="4,16,e5e031f03409e019"/>
-<approved hash="4,16,e42030300dc9d9d9"/>
-<approved hash="4,16,5052024202305020"/>
-<approved hash="4,16,f1e1e1f1e430f420"/>
-<approved hash="4,16,f021e031ddf0cde0"/>
-<approved hash="4,16,6defe1ffe43c682c"/>
-<approved hash="4,16,6c2fe03fddfc51ec"/>
-<approved hash="4,16,402c103c2df87de8"/>
-<approved hash="4,16,41ec11fc14384428"/>
-<approved hash="4,16,2c20a0309df611e6"/>
-<approved hash="4,16,2de0a1f0a4362826"/>
-<approved hash="4,16,685fea4fea3c682c"/>
-<approved hash="4,16,302020301dc90dd9"/>
-<approved hash="4,16,31e021f024093419"/>
-<approved hash="4,16,505a024a02385028"/>
-<approved hash="4,16,2421f031cdf019e0"/>
-<approved hash="4,16,25e1f1f1f4302020"/>
-<approved hash="4,16,35c3c7d3ca343824"/>
-<approved hash="4,16,3413c603ce483c58"/>
-<approved hash="4,16,3433c623c3283138"/>
-<approved hash="4,16,30f3c2e3c2443054"/>
-<approved hash="4,16,37fac7eac42a343a"/>
-<approved hash="4,16,5c103e00364c545c"/>
-<approved hash="4,16,58f03ae03a405850"/>
-<approved hash="4,16,5dc03fd032305020"/>
-<approved hash="4,16,5c303e203b2c593c"/>
-<approved hash="4,16,3bfa27ea24313821"/>
-<approved hash="4,16,31aa2dba2cb130a1"/>
-<approved hash="4,16,3c2a203a20713c61"/>
-<approved hash="4,16,206e3c7e3c692079"/>
-</errors>
 </board>
 </drawing>
 </eagle>
