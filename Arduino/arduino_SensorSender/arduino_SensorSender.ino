@@ -1,4 +1,3 @@
-
 //Libraries
 #include <DHT.h>       //Temperatur und Luftfeuchtigkeit
 #include <Wire.h>
@@ -11,6 +10,7 @@
 #include <EEPROM.h>
 #include <AESLib.h>
 #include <math.h>
+#include <Base64.h>
 
 //Konstanten und Variablen
 
@@ -39,7 +39,7 @@
   long addressTimeId;
 
   //Verschluesselung AES
-  uint8_t key[] = {'A',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+  uint8_t key[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'};
   
   
   //
@@ -105,7 +105,7 @@ void loop() {
    serielleAusgabe();
    delay(100);
 
-   for(int i = 0; i < 4; i++)
+   for(int i = 0; i < 8; i++)
    {
      LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
    }
@@ -161,21 +161,21 @@ void sendOverRadio(){
     t_sensorData.value = temperatur;
     t_sensorData.unit = 1;
     sendData(t_sensorData);
-    temperatur = NAN;
+   // temperatur = NAN;
   }
   delay(3);
   if(!isnan(humidity)){
     t_sensorData.value = humidity;
     t_sensorData.unit = 2;
     sendData(t_sensorData);
-    humidity = NAN;
+   // humidity = NAN;
   }
   delay(3);
   if(!isnan(pressure)){
     t_sensorData.value = pressure;
     t_sensorData.unit = 3;
     sendData(t_sensorData);
-    pressure = NAN;
+   // pressure = NAN;
   }
   radio.powerDown();
 }
@@ -209,8 +209,39 @@ long EEPROMReadlong(long address)
 
 secureMessage verschluessleData(sensorData  data){
   secureMessage message;
-  memcpy(&message.message, &data, sizeof(data));  
-  aes128_enc_single(key, message.message);
+  
+  char encoded[base64_enc_len(sizeof(data))];
+  char dataToEncode[sizeof(data)];
+  memcpy(&dataToEncode, &data, sizeof(data));
+  
+  base64_encode(encoded, dataToEncode, sizeof(dataToEncode));
+
+  Serial.print("Laenge encodierte message:");
+  Serial.println(sizeof(encoded));
+
+  Serial.println(encoded);
+
+  memcpy(&message.message, &encoded, sizeof(encoded)); 
+  
+  
+  char keyEncoded[base64_enc_len(sizeof(key))];
+  
+  memcpy(&keyForAes, &keyEncoded, sizeof(keyEncoded));
+  s
+  base64_encode(keyEncoded, key, sizeof(key));
+
+  uint8_t keyForAes[sizeof(keyEncoded)];
+  memcpy(&keyForAes, &keyEncoded, sizeof(keyEncoded));
+  aes256_enc_single(keyForAes, message.message);
+
+  
+
+  for(int i = 0 ; i < sizeof(message.message); i++){
+  Serial.print( message.message[i] );
+  }
+  Serial.println();  
+
+  
   return message;
 }
 

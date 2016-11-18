@@ -111,43 +111,52 @@
 <wire x1="68.25" y1="0" x2="68.25" y2="69.84" width="0" layer="20"/>
 <wire x1="68.25" y1="69.84" x2="0" y2="69.84" width="0" layer="20"/>
 <wire x1="0" y1="69.84" x2="0" y2="0" width="0" layer="20"/>
-<text x="49.53" y="21.59" size="1.016" layer="21" align="center-left">GND</text>
-<text x="49.53" y="19.05" size="1.016" layer="21" align="center-left">DATA</text>
-<text x="49.53" y="16.51" size="1.016" layer="21" align="center-left">5 V</text>
-<text x="48.26" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
-<text x="24.13" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
-<text x="3.81" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
+<text x="53.34" y="19.05" size="1.016" layer="21" rot="R180" align="center-left">GND</text>
+<text x="53.34" y="16.51" size="1.016" layer="21" rot="R180" align="center-left">DATA</text>
+<text x="53.34" y="13.97" size="1.016" layer="21" rot="R180" align="center-left">5 V</text>
+<text x="50.8" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
+<text x="25.4" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
+<text x="6.35" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">3.3 V</text>
 <text x="6.35" y="24.13" size="1.016" layer="21" align="center-left">3.3 V</text>
-<text x="26.67" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">GND</text>
-<text x="6.35" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">GND</text>
+<text x="27.94" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">GND</text>
+<text x="8.89" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">GND</text>
 <text x="6.35" y="21.59" size="1.016" layer="21" align="center-left">GND</text>
-<text x="45.72" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">DATA</text>
-<text x="29.21" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SCL</text>
-<text x="31.75" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SDA</text>
-<text x="34.29" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">ADD</text>
-<text x="13.97" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">ADD</text>
-<text x="11.43" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SDA</text>
-<text x="8.89" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SCL</text>
+<text x="48.26" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">DATA</text>
+<text x="30.48" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SCL</text>
+<text x="33.02" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SDA</text>
+<text x="35.56" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">ADD</text>
+<text x="16.51" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">ADD</text>
+<text x="13.97" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SDA</text>
+<text x="11.43" y="6.35" size="1.016" layer="21" rot="R90" align="center-left">SCL</text>
 <text x="6.35" y="19.05" size="1.016" layer="21" align="center-left">DO</text>
 <text x="6.35" y="16.51" size="1.016" layer="21" align="center-left">AO</text>
-<text x="8.89" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">GND</text>
-<text x="13.97" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">DATA</text>
-<text x="16.51" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">3.3 V</text>
-<text x="11.43" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">NULL</text>
-<text x="44.45" y="64.77" size="1.016" layer="21" align="center-left">3.3 V</text>
-<text x="33.02" y="64.77" size="1.016" layer="21" align="center-left">GND</text>
-<text x="33.02" y="59.69" size="1.016" layer="21" align="center-left">SCK</text>
-<text x="33.02" y="57.15" size="1.016" layer="21" align="center-left">MISO</text>
-<text x="44.45" y="59.69" size="1.016" layer="21" align="center-left">MOSI</text>
-<text x="33.02" y="62.23" size="1.016" layer="21" align="center-left">CE</text>
-<text x="44.45" y="62.23" size="1.016" layer="21" align="center-left">CSN</text>
+<text x="7.62" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">GND</text>
+<text x="12.7" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">DATA</text>
+<text x="15.24" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">3.3 V</text>
+<text x="10.16" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">NULL</text>
+<text x="45.72" y="64.77" size="1.016" layer="21" align="center-left">3.3 V</text>
+<text x="38.1" y="64.77" size="1.016" layer="21" rot="R180" align="center-left">GND</text>
+<text x="38.1" y="59.69" size="1.016" layer="21" rot="R180" align="center-left">SCK</text>
+<text x="38.1" y="57.15" size="1.016" layer="21" rot="R180" align="center-left">MISO</text>
+<text x="45.72" y="59.69" size="1.016" layer="21" align="center-left">MOSI</text>
+<text x="38.1" y="62.23" size="1.016" layer="21" rot="R180" align="center-left">CE</text>
+<text x="45.72" y="62.23" size="1.016" layer="21" align="center-left">CSN</text>
 <text x="58.42" y="13.97" size="1.27" layer="21" rot="R90" align="center-left">MOTION-PIR</text>
-<text x="63.5" y="40.64" size="1.016" layer="21" align="center-left">VIN</text>
-<text x="63.5" y="43.18" size="1.016" layer="21" align="center-left">GND</text>
+<text x="21.59" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">VIN</text>
+<text x="24.13" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">GND</text>
 <text x="7.62" y="12.7" size="3.81" layer="21" ratio="31" align="center-left">SensorknotenIoT</text>
 <text x="46.99" y="12.7" size="3.81" layer="22" ratio="31" rot="MR0" align="center-left">SensorknotenIoT</text>
-<text x="66.04" y="2.54" size="1.6764" layer="22" ratio="31" rot="MR0" align="center-left">©JanGerber</text>
+<text x="67.31" y="2.54" size="1.6764" layer="22" ratio="31" rot="MR0" align="center-left">©JanGerber</text>
 <text x="2.54" y="66.04" size="1.27" layer="21" ratio="31" rot="R270" align="center-left">©JanGerber</text>
+<text x="30.48" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">3.3 V</text>
+<text x="33.02" y="62.23" size="1.016" layer="21" rot="R270" align="center-left">DATA</text>
+<text x="6.35" y="49.53" size="1.016" layer="21" align="center-left">GND</text>
+<text x="6.35" y="52.07" size="1.016" layer="21" align="center-left">DATA</text>
+<text x="6.35" y="54.61" size="1.016" layer="21" align="center-left">5 V</text>
+<text x="45.72" y="21.59" size="1.016" layer="21" rot="R270" align="center-left">GND</text>
+<text x="45.72" y="45.72" size="1.016" layer="21" rot="R90" align="center-left">GND</text>
+<text x="48.26" y="45.72" size="1.016" layer="21" rot="R90" align="center-left">5 V</text>
+<text x="48.26" y="21.59" size="1.016" layer="21" rot="R270" align="center-left">3.3 V</text>
 </plain>
 <libraries>
 <library name="pinhead">
@@ -270,6 +279,39 @@
 <rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
 <rectangle x1="-4.064" y1="-0.254" x2="-3.556" y2="0.254" layer="51"/>
 <rectangle x1="3.556" y1="-0.254" x2="4.064" y2="0.254" layer="51"/>
+</package>
+<package name="1X03">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<wire x1="-3.175" y1="1.27" x2="-1.905" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="1.27" x2="-1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="-0.635" x2="-1.905" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-0.635" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="1.27" x2="0.635" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="1.27" x2="1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="0.635" x2="1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="-0.635" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="-1.27" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="-1.27" x2="-1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-3.81" y1="0.635" x2="-3.81" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-3.175" y1="1.27" x2="-3.81" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-3.81" y1="-0.635" x2="-3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-1.27" x2="-3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="0.635" x2="1.905" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="1.27" x2="3.175" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="1.27" x2="3.81" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="3.81" y1="0.635" x2="3.81" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="3.81" y1="-0.635" x2="3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="-1.27" x2="1.905" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="-1.27" x2="1.27" y2="-0.635" width="0.1524" layer="21"/>
+<pad name="1" x="-2.54" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="2" x="0" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="3" x="2.54" y="0" drill="1.016" shape="long" rot="R90"/>
+<text x="-3.8862" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.81" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="51"/>
+<rectangle x1="-2.794" y1="-0.254" x2="-2.286" y2="0.254" layer="51"/>
+<rectangle x1="2.286" y1="-0.254" x2="2.794" y2="0.254" layer="51"/>
 </package>
 </packages>
 </library>
@@ -1730,6 +1772,55 @@ Package for the RHT03 / DHT-22 relative humidity and temperature sensor.
 </package>
 </packages>
 </library>
+<library name="switch">
+<description>&lt;b&gt;Switches&lt;/b&gt;&lt;p&gt;
+Marquardt, Siemens, C&amp;K, ITT, and others&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="320-916">
+<description>&lt;b&gt;TOGGLE SWITCH&lt;/b&gt;&lt;p&gt;
+distributor RS Components</description>
+<wire x1="-2.8702" y1="6.6802" x2="-3.5052" y2="6.0452" width="0.1524" layer="21"/>
+<wire x1="-2.8702" y1="6.6802" x2="2.8702" y2="6.6802" width="0.1524" layer="21"/>
+<wire x1="3.5052" y1="6.0452" x2="2.8702" y2="6.6802" width="0.1524" layer="21"/>
+<wire x1="2.8702" y1="-6.6802" x2="3.5052" y2="-6.0452" width="0.1524" layer="21"/>
+<wire x1="2.8702" y1="-6.6802" x2="-2.8702" y2="-6.6802" width="0.1524" layer="21"/>
+<wire x1="-3.5052" y1="-6.0452" x2="-2.8702" y2="-6.6802" width="0.1524" layer="21"/>
+<wire x1="4.318" y1="2.286" x2="4.318" y2="-2.286" width="0.1524" layer="21"/>
+<wire x1="-4.318" y1="2.286" x2="-4.318" y2="-2.286" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="-1.27" x2="2.54" y2="-1.905" width="0.1524" layer="51"/>
+<wire x1="2.54" y1="-1.905" x2="2.54" y2="-2.54" width="0.1524" layer="51"/>
+<wire x1="1.905" y1="-3.175" x2="2.54" y2="-2.54" width="0.1524" layer="51"/>
+<wire x1="1.905" y1="-3.175" x2="-1.905" y2="-3.175" width="0.1524" layer="51"/>
+<wire x1="-2.54" y1="-2.54" x2="-1.905" y2="-3.175" width="0.1524" layer="51"/>
+<wire x1="-2.54" y1="-2.54" x2="-2.54" y2="-1.905" width="0.1524" layer="51"/>
+<wire x1="-1.905" y1="-1.27" x2="-2.54" y2="-1.905" width="0.1524" layer="51"/>
+<wire x1="-1.905" y1="-1.27" x2="1.905" y2="-1.27" width="0.1524" layer="51"/>
+<wire x1="1.6002" y1="1.27" x2="2.54" y2="-1.905" width="0.1524" layer="51"/>
+<wire x1="3.5052" y1="-6.0452" x2="3.5052" y2="-2.8702" width="0.1524" layer="21"/>
+<wire x1="3.5052" y1="6.0452" x2="3.5052" y2="2.8702" width="0.1524" layer="21"/>
+<wire x1="-3.5052" y1="2.8702" x2="-3.5052" y2="6.0452" width="0.1524" layer="21"/>
+<wire x1="-3.5052" y1="-6.0452" x2="-3.5052" y2="-2.8194" width="0.1524" layer="21"/>
+<wire x1="-1.6002" y1="1.27" x2="-2.54" y2="-1.905" width="0.1524" layer="51"/>
+<wire x1="-2.54" y1="-2.54" x2="2.54" y2="-2.54" width="0.1524" layer="51" curve="-270"/>
+<wire x1="-2.54" y1="-1.27" x2="2.54" y2="-1.27" width="0.1524" layer="51" curve="-233.130102"/>
+<wire x1="-1.6002" y1="1.27" x2="1.6002" y2="1.27" width="0.1524" layer="51"/>
+<wire x1="-4.318" y1="-2.286" x2="-3.5052" y2="-2.8194" width="0.1524" layer="21"/>
+<wire x1="-3.5052" y1="-2.8194" x2="0" y2="-5.08" width="0.1524" layer="51"/>
+<wire x1="4.318" y1="-2.286" x2="3.5052" y2="-2.8702" width="0.1524" layer="21"/>
+<wire x1="3.5052" y1="-2.8702" x2="0" y2="-5.08" width="0.1524" layer="51"/>
+<wire x1="4.318" y1="2.286" x2="3.5052" y2="2.8702" width="0.1524" layer="21"/>
+<wire x1="3.5052" y1="2.8702" x2="0" y2="5.08" width="0.1524" layer="51"/>
+<wire x1="-4.318" y1="2.286" x2="-3.5052" y2="2.8702" width="0.1524" layer="21"/>
+<wire x1="-3.5052" y1="2.8702" x2="0" y2="5.08" width="0.1524" layer="51"/>
+<pad name="3" x="0" y="-4.0132" drill="2.0066" shape="long"/>
+<pad name="2" x="0" y="0" drill="2.0066" shape="long"/>
+<pad name="1" x="0" y="4.0132" drill="2.0066" shape="long"/>
+<text x="-2.54" y="7.62" size="1.778" layer="25" ratio="10">&gt;NAME</text>
+<text x="-2.54" y="-9.525" size="1.778" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -1921,142 +2012,175 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="BATTERIE" library="pinhead" package="1X02" value="" x="60.96" y="41.91" rot="R90"/>
-<element name="BMP180" library="pinhead" package="1X05" value="" x="8.89" y="3.81" rot="R180"/>
-<element name="NRF24L01+" library="diy-modules" package="WIRELESS-NRF24L01" value="" x="52.07" y="58.42"/>
-<element name="R1" library="resistor" package="0207/10" value="10k" x="13.97" y="53.34"/>
-<element name="MOTION-PIR" library="diy-modules" package="MOTION-PIR-DYP-ME003" value="" x="66.04" y="19.05" rot="R270"/>
-<element name="DHT22" library="RHT03_DHT-22_AM2302" package="RHT03_DHT-22" value="" x="12.7" y="64.77" rot="R180">
-<attribute name="PROD_ID" value="SEN-10167" x="12.7" y="64.77" size="1.778" layer="27" rot="R180" display="off"/>
+<element name="BATTERIE" library="pinhead" package="1X02" value="" x="22.86" y="64.77"/>
+<element name="BMP180" library="pinhead" package="1X05" value="" x="11.43" y="3.81" rot="R180"/>
+<element name="NRF24L01+" library="diy-modules" package="WIRELESS-NRF24L01" value="" x="53.34" y="58.42"/>
+<element name="R1" library="resistor" package="0207/10" value="10k" x="17.78" y="54.61"/>
+<element name="MOTION-PIR" library="diy-modules" package="MOTION-PIR-DYP-ME003" value="" x="66.04" y="16.51" rot="R270"/>
+<element name="DHT22" library="RHT03_DHT-22_AM2302" package="RHT03_DHT-22" value="" x="11.43" y="64.77" rot="R180">
+<attribute name="PROD_ID" value="SEN-10167" x="11.43" y="64.77" size="1.778" layer="27" rot="R180" display="off"/>
 </element>
-<element name="BH1750" library="pinhead" package="1X05" value="" x="29.21" y="3.81" rot="R180"/>
-<element name="REED-SCHALTER" library="pinhead" package="1X02" value="" x="46.99" y="3.81" rot="R180"/>
+<element name="BH1750" library="pinhead" package="1X05" value="" x="30.48" y="3.81" rot="R180"/>
+<element name="REED-SCHALTER" library="pinhead" package="1X02" value="" x="49.53" y="3.81" smashed="yes" rot="R180">
+<attribute name="NAME" x="50.8762" y="1.9812" size="1.27" layer="25" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="52.07" y="6.985" size="1.27" layer="27" rot="R180"/>
+</element>
 <element name="BODEN-FEUCHT" library="pinhead" package="1X04" value="" x="3.81" y="20.32" rot="R90"/>
-<element name="ARDUINO-PRO-MINI" library="diy-modules" package="ARDUINO-PRO-MINI#NP" value="" x="16.51" y="-19.05"/>
-<element name="IN" library="pinhead" package="1X02" value="" x="5.08" y="-41.91"/>
-<element name="OUT" library="pinhead" package="1X02" value="" x="5.08" y="-57.15"/>
+<element name="1-WIRE" library="pinhead" package="1X03" value="" x="3.81" y="52.07" rot="R90"/>
+<element name="R2" library="resistor" package="0207/10" value="4k7" x="17.78" y="49.53"/>
+<element name="S1" library="switch" package="320-916" value="" x="62.23" y="40.64"/>
+<element name="REED-SCHALTER1" library="pinhead" package="1X02" value="" x="31.75" y="64.77"/>
+<element name="ARDUINO-PRO-MINI" library="diy-modules" package="ARDUINO-PRO-MINI#NP" value="" x="22.86" y="35.56"/>
+<element name="IN-5V" library="pinhead" package="1X02" value="" x="46.99" y="43.18" rot="R180"/>
+<element name="OUT-3.3V" library="pinhead" package="1X02" value="" x="46.99" y="24.13"/>
 </elements>
 <signals>
 <signal name="GND">
-<contactref element="DHT22" pad="GND"/>
-<contactref element="OUT" pad="1"/>
-<contactref element="NRF24L01+" pad="1"/>
-<contactref element="BMP180" pad="4"/>
-<contactref element="BH1750" pad="4"/>
-<contactref element="BH1750" pad="1"/>
-<contactref element="BODEN-FEUCHT" pad="3"/>
-<wire x1="8.89" y1="64.77" x2="39.37" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="3.81" y1="21.59" x2="8.89" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="6.35" y1="3.81" x2="3.81" y2="21.59" width="0" layer="19" extent="1-1"/>
-<wire x1="26.67" y1="3.81" x2="6.35" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="34.29" y1="3.81" x2="26.67" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="3.81" y1="-57.15" x2="6.35" y2="3.81" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="RAW">
-<contactref element="BATTERIE" pad="1"/>
-<contactref element="ARDUINO-PRO-MINI" pad="J6.1"/>
-<wire x1="3.81" y1="-11.43" x2="60.96" y2="40.64" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$1">
-<contactref element="ARDUINO-PRO-MINI" pad="J6.2"/>
-<contactref element="BATTERIE" pad="2"/>
-<contactref element="IN" pad="2"/>
-<contactref element="MOTION-PIR" pad="1"/>
-<contactref element="ARDUINO-PRO-MINI" pad="J7.9"/>
-<wire x1="55.88" y1="21.59" x2="60.96" y2="43.18" width="0" layer="19" extent="1-1"/>
-<wire x1="6.35" y1="-11.43" x2="55.88" y2="21.59" width="0" layer="19" extent="1-1"/>
-<wire x1="11.43" y1="-26.67" x2="6.35" y2="-11.43" width="0" layer="19" extent="1-1"/>
-<wire x1="6.35" y1="-41.91" x2="11.43" y2="-26.67" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$2">
-<contactref element="ARDUINO-PRO-MINI" pad="J6.4"/>
-<contactref element="IN" pad="1"/>
-<contactref element="MOTION-PIR" pad="3"/>
-<wire x1="11.43" y1="-11.43" x2="55.88" y2="16.51" width="0" layer="19" extent="1-1"/>
-<wire x1="3.81" y1="-41.91" x2="11.43" y2="-11.43" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$4">
-<contactref element="MOTION-PIR" pad="2"/>
-<contactref element="ARDUINO-PRO-MINI" pad="J7.7"/>
-<wire x1="16.51" y1="-26.67" x2="55.88" y2="19.05" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="3.3V">
-<contactref element="OUT" pad="2"/>
-<contactref element="NRF24L01+" pad="2"/>
-<contactref element="REED-SCHALTER" pad="1"/>
+<contactref element="OUT-3.3V" pad="1"/>
 <contactref element="BMP180" pad="5"/>
 <contactref element="BH1750" pad="5"/>
+<contactref element="DHT22" pad="GND"/>
+<contactref element="BODEN-FEUCHT" pad="3"/>
+<contactref element="BH1750" pad="1"/>
+<contactref element="BATTERIE" pad="2"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J6.2"/>
+<contactref element="IN-5V" pad="2"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J3.1"/>
+<contactref element="1-WIRE" pad="1"/>
+<contactref element="MOTION-PIR" pad="1"/>
+<contactref element="NRF24L01+" pad="1"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J7.9"/>
+<wire x1="24.13" y1="64.77" x2="40.64" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="7.62" y1="64.77" x2="24.13" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="49.53" x2="7.62" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="12.7" y1="43.18" x2="3.81" y2="49.53" width="0" layer="19" extent="1-1"/>
+<wire x1="17.78" y1="27.94" x2="12.7" y2="43.18" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="21.59" x2="17.78" y2="27.94" width="0" layer="19" extent="1-1"/>
+<wire x1="6.35" y1="3.81" x2="3.81" y2="21.59" width="0" layer="19" extent="1-1"/>
+<wire x1="25.4" y1="3.81" x2="6.35" y2="3.81" width="0" layer="19" extent="1-1"/>
+<wire x1="35.56" y1="3.81" x2="25.4" y2="3.81" width="0" layer="19" extent="1-1"/>
+<wire x1="38.1" y1="35.56" x2="17.78" y2="27.94" width="0" layer="19" extent="1-1"/>
+<wire x1="45.72" y1="43.18" x2="38.1" y2="35.56" width="0" layer="19" extent="1-1"/>
+<wire x1="45.72" y1="24.13" x2="38.1" y2="35.56" width="0" layer="19" extent="1-1"/>
+<wire x1="55.88" y1="19.05" x2="45.72" y2="24.13" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$1">
+<contactref element="ARDUINO-PRO-MINI" pad="J6.1"/>
+<contactref element="S1" pad="3"/>
+<wire x1="10.16" y1="43.18" x2="62.23" y2="36.6268" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$2">
+<contactref element="S1" pad="2"/>
+<contactref element="BATTERIE" pad="1"/>
+<wire x1="21.59" y1="64.77" x2="62.23" y2="40.64" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="IN-3.3V">
+<contactref element="ARDUINO-PRO-MINI" pad="J6.4"/>
+<contactref element="IN-5V" pad="1"/>
+<contactref element="R2" pad="1"/>
+<contactref element="1-WIRE" pad="3"/>
+<contactref element="MOTION-PIR" pad="3"/>
+<wire x1="17.78" y1="43.18" x2="48.26" y2="43.18" width="0" layer="19" extent="1-1"/>
+<wire x1="12.7" y1="49.53" x2="17.78" y2="43.18" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="54.61" x2="12.7" y2="49.53" width="0" layer="19" extent="1-1"/>
+<wire x1="55.88" y1="13.97" x2="48.26" y2="43.18" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="3.3V">
 <contactref element="DHT22" pad="VDD"/>
 <contactref element="R1" pad="2"/>
+<contactref element="BMP180" pad="4"/>
+<contactref element="OUT-3.3V" pad="2"/>
+<contactref element="BH1750" pad="4"/>
 <contactref element="BODEN-FEUCHT" pad="4"/>
-<wire x1="16.51" y1="64.77" x2="41.91" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="19.05" y1="53.34" x2="16.51" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="3.81" y1="24.13" x2="19.05" y2="53.34" width="0" layer="19" extent="1-1"/>
-<wire x1="3.81" y1="3.81" x2="3.81" y2="24.13" width="0" layer="19" extent="1-1"/>
-<wire x1="24.13" y1="3.81" x2="3.81" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="48.26" y1="3.81" x2="24.13" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="6.35" y1="-57.15" x2="3.81" y2="3.81" width="0" layer="19" extent="1-1"/>
+<contactref element="REED-SCHALTER1" pad="1"/>
+<contactref element="REED-SCHALTER" pad="1"/>
+<contactref element="NRF24L01+" pad="2"/>
+<wire x1="30.48" y1="64.77" x2="43.18" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="22.86" y1="54.61" x2="30.48" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="15.24" y1="64.77" x2="22.86" y2="54.61" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="24.13" x2="22.86" y2="54.61" width="0" layer="19" extent="1-1"/>
+<wire x1="8.89" y1="3.81" x2="3.81" y2="24.13" width="0" layer="19" extent="1-1"/>
+<wire x1="27.94" y1="3.81" x2="8.89" y2="3.81" width="0" layer="19" extent="1-1"/>
+<wire x1="50.8" y1="3.81" x2="27.94" y2="3.81" width="0" layer="19" extent="1-1"/>
+<wire x1="48.26" y1="24.13" x2="50.8" y2="3.81" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$6">
-<contactref element="NRF24L01+" pad="3"/>
-<contactref element="ARDUINO-PRO-MINI" pad="J7.1"/>
-<wire x1="31.75" y1="-26.67" x2="39.37" y2="62.23" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$7">
-<contactref element="NRF24L01+" pad="4"/>
-<contactref element="ARDUINO-PRO-MINI" pad="J6.12"/>
-<wire x1="31.75" y1="-11.43" x2="41.91" y2="62.23" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$8">
-<contactref element="ARDUINO-PRO-MINI" pad="J6.9"/>
-<contactref element="NRF24L01+" pad="5"/>
-<wire x1="24.13" y1="-11.43" x2="39.37" y2="59.69" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$9">
-<contactref element="NRF24L01+" pad="6"/>
-<contactref element="ARDUINO-PRO-MINI" pad="J6.11"/>
-<wire x1="29.21" y1="-11.43" x2="41.91" y2="59.69" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$10">
-<contactref element="NRF24L01+" pad="7"/>
-<contactref element="ARDUINO-PRO-MINI" pad="J6.10"/>
-<wire x1="26.67" y1="-11.43" x2="39.37" y2="57.15" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$11">
-<contactref element="ARDUINO-PRO-MINI" pad="J7.8"/>
-<contactref element="REED-SCHALTER" pad="2"/>
-<wire x1="13.97" y1="-26.67" x2="45.72" y2="3.81" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$5">
-<contactref element="ARDUINO-PRO-MINI" pad="J2.2"/>
-<contactref element="BMP180" pad="3"/>
-<contactref element="BH1750" pad="3"/>
-<wire x1="8.89" y1="3.81" x2="29.21" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="12.7" y1="-13.97" x2="8.89" y2="3.81" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$12">
-<contactref element="ARDUINO-PRO-MINI" pad="J2.1"/>
-<contactref element="BMP180" pad="2"/>
-<contactref element="BH1750" pad="2"/>
-<wire x1="11.43" y1="3.81" x2="31.75" y2="3.81" width="0" layer="19" extent="1-1"/>
-<wire x1="15.24" y1="-13.97" x2="11.43" y2="3.81" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$3">
-<contactref element="ARDUINO-PRO-MINI" pad="J7.6"/>
 <contactref element="DHT22" pad="DATA"/>
 <contactref element="R1" pad="1"/>
-<wire x1="8.89" y1="53.34" x2="13.97" y2="64.77" width="0" layer="19" extent="1-1"/>
-<wire x1="19.05" y1="-26.67" x2="8.89" y2="53.34" width="0" layer="19" extent="1-1"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J7.6"/>
+<wire x1="12.7" y1="54.61" x2="12.7" y2="64.77" width="0" layer="19" extent="1-1"/>
+<wire x1="25.4" y1="27.94" x2="12.7" y2="54.61" width="0" layer="19" extent="1-1"/>
 </signal>
-<signal name="N$14">
+<signal name="N$8">
 <contactref element="BODEN-FEUCHT" pad="1"/>
 <contactref element="ARDUINO-PRO-MINI" pad="J3.2"/>
-<wire x1="31.75" y1="-16.51" x2="3.81" y2="16.51" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="16.51" x2="38.1" y2="38.1" width="0" layer="19" extent="1-1"/>
 </signal>
-<signal name="N$15">
+<signal name="N$5">
 <contactref element="BODEN-FEUCHT" pad="2"/>
 <contactref element="ARDUINO-PRO-MINI" pad="J7.5"/>
-<wire x1="21.59" y1="-26.67" x2="3.81" y2="19.05" width="0" layer="19" extent="1-1"/>
+<wire x1="3.81" y1="19.05" x2="27.94" y2="27.94" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$7">
+<contactref element="1-WIRE" pad="2"/>
+<contactref element="R2" pad="2"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J7.4"/>
+<wire x1="3.81" y1="52.07" x2="22.86" y2="49.53" width="0" layer="19" extent="1-1"/>
+<wire x1="30.48" y1="27.94" x2="22.86" y2="49.53" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$9">
+<contactref element="REED-SCHALTER1" pad="2"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J7.3"/>
+<wire x1="33.02" y1="27.94" x2="33.02" y2="64.77" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$10">
+<contactref element="ARDUINO-PRO-MINI" pad="J7.7"/>
+<contactref element="MOTION-PIR" pad="2"/>
+<wire x1="22.86" y1="27.94" x2="55.88" y2="16.51" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$11">
+<contactref element="REED-SCHALTER" pad="2"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J7.8"/>
+<wire x1="20.32" y1="27.94" x2="48.26" y2="3.81" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$12">
+<contactref element="BH1750" pad="2"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J2.1"/>
+<contactref element="BMP180" pad="2"/>
+<wire x1="13.97" y1="3.81" x2="21.59" y2="40.64" width="0" layer="19" extent="1-1"/>
+<wire x1="33.02" y1="3.81" x2="13.97" y2="3.81" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$13">
+<contactref element="ARDUINO-PRO-MINI" pad="J2.2"/>
+<contactref element="BH1750" pad="3"/>
+<contactref element="BMP180" pad="3"/>
+<wire x1="11.43" y1="3.81" x2="19.05" y2="40.64" width="0" layer="19" extent="1-1"/>
+<wire x1="30.48" y1="3.81" x2="11.43" y2="3.81" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$15">
+<contactref element="NRF24L01+" pad="3"/>
+<contactref element="ARDUINO-PRO-MINI" pad="J7.1"/>
+<wire x1="38.1" y1="27.94" x2="40.64" y2="62.23" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$16">
+<contactref element="ARDUINO-PRO-MINI" pad="J6.12"/>
+<contactref element="NRF24L01+" pad="4"/>
+<wire x1="38.1" y1="43.18" x2="43.18" y2="62.23" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$17">
+<contactref element="ARDUINO-PRO-MINI" pad="J6.9"/>
+<contactref element="NRF24L01+" pad="5"/>
+<wire x1="30.48" y1="43.18" x2="40.64" y2="59.69" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$18">
+<contactref element="ARDUINO-PRO-MINI" pad="J6.11"/>
+<contactref element="NRF24L01+" pad="6"/>
+<wire x1="35.56" y1="43.18" x2="43.18" y2="59.69" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$19">
+<contactref element="ARDUINO-PRO-MINI" pad="J6.10"/>
+<contactref element="NRF24L01+" pad="7"/>
+<wire x1="33.02" y1="43.18" x2="40.64" y2="57.15" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 </board>
