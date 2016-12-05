@@ -51,7 +51,7 @@
   };
 
   struct secureMessage{
-    byte message [16];
+    char message [16];
   };
   
 void setup() {
@@ -209,39 +209,30 @@ long EEPROMReadlong(long address)
 
 secureMessage verschluessleData(sensorData  data){
   secureMessage message;
-  
+  memcpy(&message.message, &data, sizeof(data));
+ 
   char encoded[base64_enc_len(sizeof(data))];
   char dataToEncode[sizeof(data)];
+ 
   memcpy(&dataToEncode, &data, sizeof(data));
   
   base64_encode(encoded, dataToEncode, sizeof(dataToEncode));
 
-  Serial.print("Laenge encodierte message:");
-  Serial.println(sizeof(encoded));
-
-  Serial.println(encoded);
-
   memcpy(&message.message, &encoded, sizeof(encoded)); 
   
-  
+  /*
   char keyEncoded[base64_enc_len(sizeof(key))];
   
   memcpy(&keyForAes, &keyEncoded, sizeof(keyEncoded));
-  s
+  
   base64_encode(keyEncoded, key, sizeof(key));
 
   uint8_t keyForAes[sizeof(keyEncoded)];
   memcpy(&keyForAes, &keyEncoded, sizeof(keyEncoded));
   aes256_enc_single(keyForAes, message.message);
 
-  
+  */
 
-  for(int i = 0 ; i < sizeof(message.message); i++){
-  Serial.print( message.message[i] );
-  }
-  Serial.println();  
-
-  
   return message;
 }
 
