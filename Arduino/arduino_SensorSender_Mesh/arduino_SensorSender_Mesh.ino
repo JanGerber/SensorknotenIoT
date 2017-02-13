@@ -1,4 +1,3 @@
-
 //Libraries
 #include <DHT.h>       //Temperatur und Luftfeuchtigkeit
 #include <Wire.h>
@@ -7,18 +6,16 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#include <RF24Network.h>
-#include <RF24Mesh.h>
 #include <LowPower.h>
 #include <EEPROM.h>
 #include <AESLib.h>
 #include <math.h>
+#include <Base64.h>
 
 //Konstanten und Variablen
 
-  #define nodeID 1
   //ID des Arduinos
-  const int arduinoId = 400;
+  const unsigned int arduinoId = 600;
   
 
   //DHT22
@@ -34,27 +31,35 @@
 
   // NRF24L01
   RF24 radio(9,10);
-  RF24Network network(radio);
-  RF24Mesh mesh(radio, network);
+  // Example below using pipe5 for writing
+  const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0x7365727631LL };
    
   char receivePayload[32];
   unsigned long timeId;
   long addressTimeId;
 
-  //Verschluesselung AES
-  uint8_t key[] = {'A',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+  unsigned int messageId;
+  int addressMessageId;
+
+  const int SIZEBLACKLIST = 50;
+  unsigned long blacklist[SIZEBLACKLIST];
+  int listPointer = 0;
   
-  
-  //
+
+  //Sensor Daten
   struct sensorData{
-    int id;
+    unsigned  int id;
     float value;
     int unit;
     unsigned long timeId;
   };
 
-  struct secureMessage{
-    byte message [16];
+  //Mesh Daten Paket
+  struct dataPacket{
+    unsigned int destinationAddr;
+    unsigned int originAddr;
+    unsigned int messageId;
+    sensorData data; 
   };
   
 void setup() {
@@ -63,55 +68,55 @@ void setup() {
   //DHT22
   dht.begin();
 
-  //BMP 180
-  /* Initialise the sensor */
-  if(!bmp.begin())
-  {
-    Serial.println("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
-  }
 
   Serial.println("init Radio");
   //nRF24L01
-  mesh.setNodeID(nodeID);
-  mesh.begin();
-//  radio.setDataRate(RF24_250KBPS); //250kbs
-//  radio.setPALevel(RF24_PA_MAX);
-//  radio.setChannel(90);
-//  radio.setRetries(15,15);
-//  radio.setCRCLength(RF24_CRC_16);
+  radio.begin();
+  radio.setPayloadSize(sizeof(dataPacket));  //Groesse der gesendeten Daten
+  radio.setAutoAck(true); 
+  radio.setDataRate(RF24_250KBPS); //250kbs
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setChannel(90);
+  radio.setRetries(15,15);
+  radio.setCRCLength(RF24_CRC_16);
 
-  Serial.println("init Radio");
-  //Timestamp
+  
+
+
+  Serial.println(radio.getChannel());
+
   addressTimeId = 1;
   timeId = EEPROMReadlong(addressTimeId);
+
+    Serial.print("timeId ID: \t");
+  Serial.println(timeId);
+  addressMessageId = 1;
+  addressMessageId += sizeof(addressMessageId);
+  messageId = (int) EEPROMReadlong(addressMessageId);
+  Serial.print("Message ID: \t");
+  Serial.println(messageId);
+  
+  getTemperatureHumidty();
+  sendDataPacket(createSensorDataPacket(temperatur));
+  delay(4000);
+
+
+  radio.startListening();
+  
+  
 }
 
 void loop() {
-
-  long start;
-  long dauer;
+    dataPacket t_DataPacket;
 
 
-   start = millis();
-   getTemperatureHumidty();
-   getPressure();
-   getLuminosity();  
-   sendOverRadio();
+    while( radio.available()){
+      radio.read( &t_DataPacket, sizeof(t_DataPacket) );
+      Serial.print("Paket erhalten: \t");
+      ausgabeSensorData(t_DataPacket.data);
+      processData(t_DataPacket);     
+   }
 
-   dauer = millis() - start;
-   Serial.print("Dauer: ");
-   Serial.print(dauer);
-   Serial.println(" ms");
-   serielleAusgabe();
-   delay(2000);
-
-//   radio.powerDown();
-//   
-//   for(int i = 0; i < 2; i++)
-//   {
-//     LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
-//   }
-//   radio.powerUp(); 
    
 }
 
@@ -120,70 +125,89 @@ void getTemperatureHumidty(){
   temperatur = dht.readTemperature();  
 }
 
-void getPressure(){
-  sensors_event_t event;
-  bmp.getEvent(&event);
-  pressure = event.pressure; 
-}
+dataPacket createSensorDataPacket(float value){
 
-void getLuminosity(){
-
-}
-
-void sendData(sensorData t_sensorData) {
-  secureMessage message;
-  message = verschluessleData(t_sensorData);
-  Serial.println("send Data");
-    // Send an 'M' type message containing the current millis()
-    if (!mesh.write(&message, 'M', sizeof(message))) {
-
-      // If a write fails, check connectivity to the mesh network
-      if ( ! mesh.checkConnection() ) {
-        //refresh the network address
-        Serial.println("Renewing Address");
-        mesh.renewAddress();
-      } else {
-        Serial.println("Send fail, Test OK");
-      }
-    } else {
-      Serial.print("Send OK: ");
-    }  
-}
-
-void sendOverRadio(){
-  Serial.println("vor Mesh update");
-  mesh.update();
-  
-  
+  //Sensor Daten uebernehmen
   sensorData t_sensorData;
   timeId++;
   EEPROMWritelong(addressTimeId, timeId);
   t_sensorData.timeId = timeId;
   t_sensorData.id = arduinoId;
+  t_sensorData.value = value;
+
+  //Packet erstellen
+  dataPacket t_dataPacket;
+  t_dataPacket.destinationAddr = 1;
+  t_dataPacket.originAddr = arduinoId;
+  messageId++;
+  EEPROMWritelong(addressMessageId,(long) messageId);
+  t_dataPacket.messageId = messageId;
+  t_dataPacket.data = t_sensorData; 
   
-  if(!isnan(temperatur)){
-    Serial.println("Temperatur is not null");
-    t_sensorData.value = temperatur;
-    t_sensorData.unit = 1;
-    sendData(t_sensorData);
-    temperatur = NAN;
+  return t_dataPacket;
+}
+
+void sendDataPacket(dataPacket t_dataPacket){
+  radio.stopListening();
+  delay(500);
+  radio.openWritingPipe(pipes[0]);
+  radio.openReadingPipe(1,pipes[1]);
+
+  Serial.print("Paket senden: \t");
+  ausgabeSensorData(t_dataPacket.data);
+  
+  for(int retry = 0; retry <= 20; retry++){
+   if (radio.write( &t_dataPacket, sizeof(t_dataPacket) )){
+    //break wenn alles Richtig gelaufen ist ggf.
+   }
+   delayMicroseconds(130);
+  }  
+  
+  radio.openWritingPipe(pipes[1]);
+  radio.openReadingPipe(1,pipes[0]);
+  delay(500);
+  radio.startListening();
+}
+
+void processData(dataPacket t_dataPacket){
+  if(!(t_dataPacket.destinationAddr == arduinoId)){
+
+     unsigned long uniqueMessageId = (unsigned long) ((unsigned long) t_dataPacket.originAddr << 16) +  (unsigned long) t_dataPacket.messageId;
+     
+     if(!compareToList(uniqueMessageId)){
+         insertInList(uniqueMessageId);
+         sendDataPacket(t_dataPacket);
+     }else{
+        //Message verwefen
+        Serial.println("Message verworfen");
+     }    
+  }else{
+    //Arduino ist Empfaenger
+    Serial.print("Arduino ist Empfaenger: \t");
+    ausgabeSensorData(t_dataPacket.data);
   }
-  delay(3);
-  if(!isnan(humidity)){
-    t_sensorData.value = humidity;
-    t_sensorData.unit = 2;
-    sendData(t_sensorData);
-    humidity = NAN;
-  }
-  delay(3);
-  if(!isnan(pressure)){
-    t_sensorData.value = pressure;
-    t_sensorData.unit = 3;
-    sendData(t_sensorData);
-    pressure = NAN;
-  }
+}
+
+void decrementPoiter() {
+    if(listPointer < SIZEBLACKLIST )
+        listPointer++;
+    else
+        listPointer=0;       
+}
+
+boolean compareToList(unsigned long uniqueMessageId){
+   for (int i=0; i<  (SIZEBLACKLIST - 1); i++) {
+        if (uniqueMessageId==blacklist[i])
+            return true;
+    }
+  return false;
   
 }
+void insertInList(unsigned long uniqueMessageId){
+    blacklist[listPointer]= uniqueMessageId;
+    decrementPoiter();
+}
+
 
 void EEPROMWritelong(int address, long value){
       //Decomposition from a long to 4 bytes by using bitshift.
@@ -212,12 +236,7 @@ long EEPROMReadlong(long address)
       return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
 }
 
-secureMessage verschluessleData(sensorData  data){
-  secureMessage message;
-  memcpy(&message.message, &data, sizeof(data));  
-  aes128_enc_single(key, message.message);
-  return message;
-}
+
 
 void serielleAusgabe(){
     Serial.print("Luftfeuchte: ");
