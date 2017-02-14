@@ -62,7 +62,7 @@
     sensorData data; 
   };
   
-void setup() {
+void setup() {  
   Serial.begin(9600);  
   
   //DHT22
@@ -79,31 +79,30 @@ void setup() {
   radio.setChannel(90);
   radio.setRetries(15,15);
   radio.setCRCLength(RF24_CRC_16);
-
   
+  //EEPROM komplett loeschen
+  for (int i = 0 ; i < EEPROM.length() ; i++) {
+    EEPROM.write(i, 0);
+   }
 
 
-  Serial.println(radio.getChannel());
+  Serial.print(radio.getChannel());
 
   addressTimeId = 1;
   timeId = EEPROMReadlong(addressTimeId);
 
-    Serial.print("timeId ID: \t");
+  Serial.print("timeId ID: \t");
   Serial.println(timeId);
   addressMessageId = 1;
   addressMessageId += sizeof(addressMessageId);
-  messageId = (int) EEPROMReadlong(addressMessageId);
+  messageId = (int) EEPROMReadInt(addressMessageId);
   Serial.print("Message ID: \t");
   Serial.println(messageId);
   
   getTemperatureHumidty();
   sendDataPacket(createSensorDataPacket(temperatur));
-  delay(4000);
-
-
   radio.startListening();
-  
-  
+    
 }
 
 void loop() {
@@ -140,7 +139,7 @@ dataPacket createSensorDataPacket(float value){
   t_dataPacket.destinationAddr = 1;
   t_dataPacket.originAddr = arduinoId;
   messageId++;
-  EEPROMWritelong(addressMessageId,(long) messageId);
+  EEPROMWriteInt(addressMessageId, messageId);
   t_dataPacket.messageId = messageId;
   t_dataPacket.data = t_sensorData; 
   
@@ -234,6 +233,26 @@ long EEPROMReadlong(long address)
 
       //Return the recomposed long by using bitshift.
       return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
+}
+void EEPROMWriteInt(int address, int value){
+      //Decomposition from a long to 4 bytes by using bitshift.
+      //One = Most significant -> Four = Least significant byte
+      byte two = (value & 0xFF);
+      byte one = ((value >> 8) & 0xFF);
+
+      //Write the 4 bytes into the eeprom memory.
+      EEPROM.write(address, two);
+      EEPROM.write(address + 1, one);
+}
+
+int EEPROMReadInt(int address)
+{
+      //Read the 4 bytes from the eeprom memory.
+      long four = EEPROM.read(address);
+      long three = EEPROM.read(address + 1);
+
+      //Return the recomposed long by using bitshift.
+      return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF);
 }
 
 
