@@ -15,7 +15,7 @@
 //Konstanten und Variablen
 
   //ID des Arduinos
-  const unsigned int arduinoId = 600;
+  unsigned int arduinoId = 9999;
   
 
   //DHT22
@@ -68,6 +68,13 @@
   
 void setup() {  
   Serial.begin(9600);  
+
+  EEPROMWriteInt(12, 200);
+  delay(500);
+
+  arduinoId = EEPROMReadInt(12);
+  delay(500);
+
   
   //DHT22
   dht.begin();
@@ -91,6 +98,8 @@ void setup() {
    } 
    */
 
+ 
+  
   Serial.print(radio.getChannel());
 
   addressTimeId = 1;
