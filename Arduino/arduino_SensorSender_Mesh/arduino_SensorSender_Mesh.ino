@@ -61,6 +61,10 @@
     unsigned int messageId;
     sensorData data; 
   };
+
+  long startTime; // millis-Wert beim ersten Drücken der Taste
+  long duration;  // Variable für die Dauer
+  int countTimer = 0;
   
 void setup() {  
   Serial.begin(9600);  
@@ -81,28 +85,60 @@ void setup() {
   radio.setCRCLength(RF24_CRC_16);
   
   //EEPROM komplett loeschen
-  for (int i = 0 ; i < EEPROM.length() ; i++) {
+  /*
+   for (int i = 0 ; i < EEPROM.length() ; i++) {
     EEPROM.write(i, 0);
-   }
-
+   } 
+   */
 
   Serial.print(radio.getChannel());
 
   addressTimeId = 1;
   timeId = EEPROMReadlong(addressTimeId);
+  delay(1000);
 
   Serial.print("timeId ID: \t");
   Serial.println(timeId);
-  addressMessageId = 1;
-  addressMessageId += sizeof(addressMessageId);
+  addressMessageId = 8;
+ // addressMessageId += sizeof(addressMessageId);
   messageId = (int) EEPROMReadInt(addressMessageId);
   Serial.print("Message ID: \t");
   Serial.println(messageId);
   
-  getTemperatureHumidty();
-  sendDataPacket(createSensorDataPacket(temperatur));
+  collectAndSendSensorData();
   radio.startListening();
+
+  // initialize timer1 
+  noInterrupts();           // disable all interrupts
+  TCCR1A = 0;
+  TCCR1B = 0;
+
+  TCNT1 = 0;            // preload timer 65536-16MHz/256/2Hz
+  TCCR1B |= (1 << CS12);    // 256 prescaler 
+  TCCR1B |= (1 << CS10); 
+  TIMSK1 |= (1 << TOIE1);   // enable timer overflow interrupt
+  interrupts();             // enable all interrupts
     
+}
+
+
+ISR(TIMER1_OVF_vect)          // timer compare interrupt service routine
+{
+  if(countTimer <= 6){
+    TCNT1 = 0; 
+    countTimer++;
+  }else{
+    Serial.print("INTERRUPT: ");
+    duration = millis() - startTime;
+    Serial.println(duration);
+    
+    TCNT1 = 0; 
+    countTimer = 0;  
+    radio.stopListening();
+    collectAndSendSensorData();
+    startTime = millis(); 
+    
+  }
 }
 
 void loop() {
@@ -111,7 +147,9 @@ void loop() {
 
     while( radio.available()){
       radio.read( &t_DataPacket, sizeof(t_DataPacket) );
-      Serial.print("Paket erhalten: \t");
+      Serial.print("Paket erhalten: \tMessageId:");
+      Serial.print(t_DataPacket.messageId);
+      Serial.print("\t");
       ausgabeSensorData(t_DataPacket.data);
       processData(t_DataPacket);     
    }
@@ -119,20 +157,38 @@ void loop() {
    
 }
 
+void collectAndSendSensorData(){
+  radio.stopListening();
+  delay(1000);
+  radio.openWritingPipe(pipes[0]);
+  radio.openReadingPipe(1,pipes[1]);
+  timeId++;
+  EEPROMWritelong(addressTimeId, timeId);
+  
+  getTemperatureHumidty();
+  sendDataPacket(createSensorDataPacket(temperatur, 1));
+
+  radio.openWritingPipe(pipes[1]);
+  radio.openReadingPipe(1,pipes[0]);
+  delay(500);
+ 
+  radio.startListening();
+}
+
 void getTemperatureHumidty(){  
   humidity = dht.readHumidity(); 
   temperatur = dht.readTemperature();  
 }
 
-dataPacket createSensorDataPacket(float value){
+dataPacket createSensorDataPacket(float value, int unit){
 
   //Sensor Daten uebernehmen
   sensorData t_sensorData;
-  timeId++;
-  EEPROMWritelong(addressTimeId, timeId);
+
   t_sensorData.timeId = timeId;
   t_sensorData.id = arduinoId;
   t_sensorData.value = value;
+  t_sensorData.unit = unit;
 
   //Packet erstellen
   dataPacket t_dataPacket;
@@ -147,12 +203,9 @@ dataPacket createSensorDataPacket(float value){
 }
 
 void sendDataPacket(dataPacket t_dataPacket){
-  radio.stopListening();
-  delay(500);
-  radio.openWritingPipe(pipes[0]);
-  radio.openReadingPipe(1,pipes[1]);
-
-  Serial.print("Paket senden: \t");
+  Serial.print("Paket senden: \tMessageId:");
+  Serial.print(t_dataPacket.messageId);
+  Serial.print("\t");
   ausgabeSensorData(t_dataPacket.data);
   
   for(int retry = 0; retry <= 20; retry++){
@@ -161,11 +214,6 @@ void sendDataPacket(dataPacket t_dataPacket){
    }
    delayMicroseconds(130);
   }  
-  
-  radio.openWritingPipe(pipes[1]);
-  radio.openReadingPipe(1,pipes[0]);
-  delay(500);
-  radio.startListening();
 }
 
 void processData(dataPacket t_dataPacket){
@@ -223,7 +271,7 @@ void EEPROMWritelong(int address, long value){
       EEPROM.write(address + 3, one);
 }
 
-long EEPROMReadlong(long address)
+long EEPROMReadlong(int address)
 {
       //Read the 4 bytes from the eeprom memory.
       long four = EEPROM.read(address);
