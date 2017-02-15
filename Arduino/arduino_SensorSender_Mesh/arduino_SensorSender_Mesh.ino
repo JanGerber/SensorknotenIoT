@@ -87,7 +87,7 @@ void setup() {
   radio.setPayloadSize(sizeof(dataPacket));  //Groesse der gesendeten Daten
   radio.setAutoAck(true); 
   radio.setDataRate(RF24_250KBPS); //250kbs
-  radio.setPALevel(RF24_PA_MAX);
+  radio.setPALevel(RF24_PA_HIGH);
   radio.setChannel(90);
   radio.setRetries(15,15);
   radio.setCRCLength(RF24_CRC_16);
@@ -157,10 +157,8 @@ void loop() {
 
     while( radio.available()){
       radio.read( &t_DataPacket, sizeof(t_DataPacket) );
-      Serial.print("Paket erhalten: \tMessageId:");
-      Serial.print(t_DataPacket.messageId);
-      Serial.print("\t");
-      ausgabeSensorData(t_DataPacket.data);
+      Serial.print("Paket erhalten: \t");
+      ausgabeDataPacket(t_DataPacket);
       processData(t_DataPacket);     
    }
 
@@ -217,7 +215,7 @@ void sendDataPacket(dataPacket t_dataPacket){
   Serial.print("Paket senden: \t");
   ausgabeDataPacket(t_dataPacket);
   
-  for(int retry = 0; retry <= 20; retry++){
+  for(int retry = 0; retry <= 40; retry++){
    if (radio.write( &t_dataPacket, sizeof(t_dataPacket) )){
     //break wenn alles Richtig gelaufen ist ggf.
    }
