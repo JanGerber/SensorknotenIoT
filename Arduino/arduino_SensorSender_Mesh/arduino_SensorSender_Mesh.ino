@@ -20,7 +20,7 @@
 
   //DHT22
   #define DHTPIN 4     // what pin we're connected to
-  #define DHTTYPE DHT22   // DHT 22  (AM2302)
+  #define DHTTYPE DHT22  // DHT 22  (AM2302)
   DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
   float humidity;
   float temperatur;
@@ -58,6 +58,7 @@
   struct dataPacket{
     unsigned int destinationAddr;
     unsigned int originAddr;
+    unsigned int lastHopAddr;
     unsigned int messageId;
     sensorData data; 
   };
@@ -68,10 +69,10 @@
   
 void setup() {  
   Serial.begin(9600);  
-
-  EEPROMWriteInt(12, 200);
+/*
+  EEPROMWriteInt(12, 1000);
   delay(500);
-
+*/
   arduinoId = EEPROMReadInt(12);
   delay(500);
 
@@ -206,16 +207,15 @@ dataPacket createSensorDataPacket(float value, int unit){
   messageId++;
   EEPROMWriteInt(addressMessageId, messageId);
   t_dataPacket.messageId = messageId;
+  t_dataPacket.lastHopAddr = 0;
   t_dataPacket.data = t_sensorData; 
   
   return t_dataPacket;
 }
 
 void sendDataPacket(dataPacket t_dataPacket){
-  Serial.print("Paket senden: \tMessageId:");
-  Serial.print(t_dataPacket.messageId);
-  Serial.print("\t");
-  ausgabeSensorData(t_dataPacket.data);
+  Serial.print("Paket senden: \t");
+  ausgabeDataPacket(t_dataPacket);
   
   for(int retry = 0; retry <= 20; retry++){
    if (radio.write( &t_dataPacket, sizeof(t_dataPacket) )){
@@ -232,6 +232,7 @@ void processData(dataPacket t_dataPacket){
      
      if(!compareToList(uniqueMessageId)){
          insertInList(uniqueMessageId);
+         t_dataPacket.lastHopAddr = arduinoId;
          sendDataPacket(t_dataPacket);
      }else{
         //Message verwefen
@@ -240,7 +241,7 @@ void processData(dataPacket t_dataPacket){
   }else{
     //Arduino ist Empfaenger
     Serial.print("Arduino ist Empfaenger: \t");
-    ausgabeSensorData(t_dataPacket.data);
+    ausgabeDataPacket(t_dataPacket);
   }
 }
 
@@ -342,6 +343,21 @@ void ausgabeSensorData(sensorData t_sensorData){
         Serial.print(" \t");
         Serial.print("TimeId: ");
         Serial.println(t_sensorData.timeId);// Get the payload
+}
+void ausgabeDataPacket(dataPacket t_dataPacket){
+    Serial.print("Destination Addr: ");
+    Serial.print(t_dataPacket.destinationAddr);
+    Serial.print(" \t");
+    Serial.print("Origin Addr: ");
+    Serial.print(t_dataPacket.originAddr);
+    Serial.print(" \t");
+    Serial.print("Last Hop Addr: ");
+    Serial.print(t_dataPacket.lastHopAddr);// Get the payload
+    Serial.print(" \t");
+    Serial.print("MessageID: ");
+    Serial.print(t_dataPacket.messageId);// Get the payload
+    Serial.print(" \t");
+    ausgabeSensorData(t_dataPacket.data);
 }
 
 
