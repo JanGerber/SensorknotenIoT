@@ -11,6 +11,7 @@
 #include <AESLib.h>
 #include <math.h>
 #include <Base64.h>
+#include <printf.h>
 
 //Konstanten und Variablen
 
@@ -32,7 +33,8 @@
   // NRF24L01
   RF24 radio(9,10);
   // Example below using pipe5 for writing
-  const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0x7365727631LL };
+  const uint64_t pipes[3] = { 0xF0F0F0F0E1LL, 0x7365727631LL, 0x7474747474LL };
+  uint8_t addresses[][6] = {"1Node","2Node"};
    
   char receivePayload[32];
   unsigned long timeId;
@@ -66,6 +68,9 @@
   long startTime; // millis-Wert beim ersten Drücken der Taste
   long duration;  // Variable für die Dauer
   int countTimer = 0;
+
+  boolean interruptHappened;
+
   
 void setup() {  
   Serial.begin(9600);  
@@ -73,6 +78,8 @@ void setup() {
   EEPROMWriteInt(12, 1000);
   delay(500);
 */
+  interruptHappened = false; 
+  
   arduinoId = EEPROMReadInt(12);
   delay(500);
 
@@ -83,14 +90,8 @@ void setup() {
 
   Serial.println("init Radio");
   //nRF24L01
-  radio.begin();
-  radio.setPayloadSize(sizeof(dataPacket));  //Groesse der gesendeten Daten
-  radio.setAutoAck(true); 
-  radio.setDataRate(RF24_250KBPS); //250kbs
-  radio.setPALevel(RF24_PA_HIGH);
-  radio.setChannel(90);
-  radio.setRetries(15,15);
-  radio.setCRCLength(RF24_CRC_16);
+
+  initRadio();
   
   //EEPROM komplett loeschen
   /*
@@ -102,7 +103,7 @@ void setup() {
  
   
   Serial.print(radio.getChannel());
-
+  
   addressTimeId = 1;
   timeId = EEPROMReadlong(addressTimeId);
   delay(1000);
@@ -144,42 +145,55 @@ ISR(TIMER1_OVF_vect)          // timer compare interrupt service routine
     
     TCNT1 = 0; 
     countTimer = 0;  
-    radio.stopListening();
-    collectAndSendSensorData();
+    interruptHappened = true;
     startTime = millis(); 
     
   }
 }
 
 void loop() {
-    dataPacket t_DataPacket;
-
-
-    while( radio.available()){
-      radio.read( &t_DataPacket, sizeof(t_DataPacket) );
-      Serial.print("Paket erhalten: \t");
-      ausgabeDataPacket(t_DataPacket);
-      processData(t_DataPacket);     
+    dataPacket t_DataPacket_Loop;
+    
+   Serial.println("Anfang Loop");
+   if(interruptHappened){
+    //radio.stopListening();
+    radio.openWritingPipe(addresses[0]);
+  radio.openReadingPipe(1,addresses[0]); //1
+    collectAndSendSensorData();
+    interruptHappened = false;
    }
+    
+    while( radio.available()){
+      radio.read( &t_DataPacket_Loop, sizeof(dataPacket) );
+      Serial.print("Paket erhalten: \t");
+      ausgabeDataPacket(t_DataPacket_Loop);
+      Serial.println("2");
+      processData(t_DataPacket_Loop);
+      Serial.println("3");     
+    }
+    Serial.println("Ende Loop");
+   
+    
 
    
 }
 
 void collectAndSendSensorData(){
   radio.stopListening();
-  delay(1000);
-  radio.openWritingPipe(pipes[0]);
-  radio.openReadingPipe(1,pipes[1]);
+  // radio.closeReadingPipe(1);
+  delay(500);
+  //radio.openWritingPipe(pipes[0]);
+ // radio.openReadingPipe(1,pipes[1]); //1
   timeId++;
   EEPROMWritelong(addressTimeId, timeId);
   
   getTemperatureHumidty();
   sendDataPacket(createSensorDataPacket(temperatur, 1));
-
-  radio.openWritingPipe(pipes[1]);
-  radio.openReadingPipe(1,pipes[0]);
+  
+  //radio.closeReadingPipe(1);
+  //radio.openWritingPipe(pipes[1]); //1
+ // radio.openReadingPipe(1,pipes[0]);
   delay(500);
- 
   radio.startListening();
 }
 
@@ -214,24 +228,40 @@ dataPacket createSensorDataPacket(float value, int unit){
 void sendDataPacket(dataPacket t_dataPacket){
   Serial.print("Paket senden: \t");
   ausgabeDataPacket(t_dataPacket);
+  Serial.println("8");
+
+  //initRadio();
+  radio.SensorknotenIoT_resetRegister();
+  printf_begin();
+  radio.printDetails();
   
+
+  Serial.println("8.1.1");
+  radio.write( &t_dataPacket, sizeof(t_dataPacket));
+  delay(50);
+    Serial.println("8.1");
   for(int retry = 0; retry <= 40; retry++){
-   if (radio.write( &t_dataPacket, sizeof(t_dataPacket) )){
-    //break wenn alles Richtig gelaufen ist ggf.
-   }
+    Serial.println("8.2");
+    //radio.write( &t_dataPacket, sizeof(t_dataPacket));
+    radio.reUseTX();
+   Serial.println("9");
    delayMicroseconds(130);
+   Serial.println("10");
   }  
 }
 
 void processData(dataPacket t_dataPacket){
   if(!(t_dataPacket.destinationAddr == arduinoId)){
-
+     Serial.println("4"); 
      unsigned long uniqueMessageId = (unsigned long) ((unsigned long) t_dataPacket.originAddr << 16) +  (unsigned long) t_dataPacket.messageId;
      
      if(!compareToList(uniqueMessageId)){
+          Serial.println("5");
          insertInList(uniqueMessageId);
+         Serial.println("6");
          t_dataPacket.lastHopAddr = arduinoId;
          sendDataPacket(t_dataPacket);
+         Serial.println("7");
      }else{
         //Message verwefen
         Serial.println("Message verworfen");
@@ -357,8 +387,19 @@ void ausgabeDataPacket(dataPacket t_dataPacket){
     Serial.print(" \t");
     ausgabeSensorData(t_dataPacket.data);
 }
-
-
+ void initRadio(){
+      radio.begin();
+      radio.setPayloadSize(sizeof(dataPacket));  //Groesse der gesendeten Daten
+      radio.enableDynamicPayloads();
+      radio.setAutoAck(true); 
+      radio.setDataRate(RF24_250KBPS); //250kbs
+      radio.setPALevel(RF24_PA_HIGH);
+      radio.setChannel(90);
+      radio.setRetries(15,15);
+      radio.setCRCLength(RF24_CRC_16);
+      radio.openWritingPipe(addresses[0]);
+      radio.openReadingPipe(1,addresses[0]); //1
+  }
 
 
 
