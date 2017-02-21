@@ -12,6 +12,7 @@
 #include <math.h>
 #include <Base64.h>
 #include <printf.h>
+#include <BH1750.h>
 
 //Konstanten und Variablen
 
@@ -25,6 +26,9 @@
   DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
   float humidity;
   float temperatur;
+  
+  BH1750 LightSensor;
+  float lux;
     
   //BPM 180
   Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085);
@@ -74,7 +78,7 @@
 void setup() {  
   Serial.begin(9600);  
 /*
-  EEPROMWriteInt(12, 1000);
+  EEPROMWriteInt(12, 100);
   delay(500);
 */
   interruptHappened = false; 
@@ -85,6 +89,12 @@ void setup() {
   
   //DHT22
   dht.begin();
+  LightSensor.begin();
+
+  if(!bmp.begin())
+  {
+    Serial.println("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
+  }
 
 
   Serial.println("init Radio");
@@ -114,6 +124,8 @@ void setup() {
   messageId = (int) EEPROMReadInt(addressMessageId);
   Serial.print("Message ID: \t");
   Serial.println(messageId);
+   Serial.print("Grosse DataPacket: \t");
+  Serial.println(sizeof(dataPacket));
   
   collectAndSendSensorData();
   radio.startListening();
@@ -176,6 +188,11 @@ void collectAndSendSensorData(){
   
   getTemperatureHumidty();
   sendDataPacket(createSensorDataPacket(temperatur, 1));
+  sendDataPacket(createSensorDataPacket(humidity, 2));
+  getLightIntensity();
+  sendDataPacket(createSensorDataPacket(lumen, 3));
+  getPressure();
+  sendDataPacket(createSensorDataPacket(pressure, 4));
   
   delay(100);
   radio.startListening();
@@ -185,6 +202,20 @@ void getTemperatureHumidty(){
   humidity = dht.readHumidity(); 
   temperatur = dht.readTemperature();  
 }
+void getLightIntensity(){  
+  Serial.print("Lux: \t");
+  lux = LightSensor.readLightLevel(); 
+  Serial.println(lux);
+}
+
+void getPressure(){
+  sensors_event_t event;
+  bmp.getEvent(&event);
+  pressure = event.pressure; 
+  Serial.print("Pressure: \t");
+  Serial.println(pressure);
+}
+
 
 dataPacket createSensorDataPacket(float value, int unit){
 
@@ -216,9 +247,10 @@ void sendDataPacket(dataPacket t_dataPacket){
   radio.SensorknotenIoT_resetRegister();
 
   radio.write( &t_dataPacket, sizeof(t_dataPacket));
-  for(int retry = 0; retry <= 40; retry++){
-    radio.reUseTX();
-   delayMicroseconds(130);
+  for(int retry = 0; retry <= 5; retry++){
+    radio.write( &t_dataPacket, sizeof(t_dataPacket));
+    //radio.reUseTX();
+   delayMicroseconds(160);
   } 
 
    
@@ -363,7 +395,7 @@ void ausgabeDataPacket(dataPacket t_dataPacket){
       radio.enableDynamicPayloads();
       radio.setAutoAck(true); 
       radio.setDataRate(RF24_250KBPS); //250kbs
-      radio.setPALevel(RF24_PA_MAX);
+      radio.setPALevel(RF24_PA_HIGH);
       radio.setChannel(90);
       radio.setRetries(15,15);
       radio.setCRCLength(RF24_CRC_16);
