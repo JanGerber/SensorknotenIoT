@@ -39,7 +39,7 @@
   // Example below using pipe5 for writing
   uint8_t addresses[][6] = {"1Node","2Node"};
    
-  char receivePayload[32];
+  //char receivePayload[32];
   unsigned long timeId;
   long addressTimeId;
 
@@ -67,6 +67,11 @@
     unsigned int messageId;
     sensorData data; 
   };
+    //Mesh Daten Paket
+  struct dataPacketEncoded{
+    char message[28];
+  };
+
 
   long startTime; // millis-Wert beim ersten Drücken der Taste
   long duration;  // Variable für die Dauer
@@ -124,8 +129,6 @@ void setup() {
   messageId = (int) EEPROMReadInt(addressMessageId);
   Serial.print("Message ID: \t");
   Serial.println(messageId);
-   Serial.print("Grosse DataPacket: \t");
-  Serial.println(sizeof(dataPacket));
   
   collectAndSendSensorData();
   radio.startListening();
@@ -150,9 +153,9 @@ ISR(TIMER1_OVF_vect)          // timer compare interrupt service routine
     TCNT1 = 0; 
     countTimer++;
   }else{
-    Serial.print("INTERRUPT: ");
-    duration = millis() - startTime;
-    Serial.println(duration);
+    // Serial.print("INTERRUPT: ");
+    //  duration = millis() - startTime;
+    //Serial.println(duration);
     
     TCNT1 = 0; 
     countTimer = 0;  
@@ -164,6 +167,7 @@ ISR(TIMER1_OVF_vect)          // timer compare interrupt service routine
 
 void loop() {
     dataPacket t_DataPacket_Loop;
+    dataPacketEncoded t_dataPacketEncoded;
     
    if(interruptHappened){
     //radio.stopListening();
@@ -172,7 +176,8 @@ void loop() {
    }
     
     while( radio.available()){
-      radio.read( &t_DataPacket_Loop, sizeof(dataPacket) );
+      radio.read( &t_dataPacketEncoded.message, sizeof(t_dataPacketEncoded.message) );
+      t_DataPacket_Loop = decodingData(t_dataPacketEncoded);
       Serial.print("Paket erhalten: \t");
       ausgabeDataPacket(t_DataPacket_Loop);
       processData(t_DataPacket_Loop);
@@ -190,7 +195,7 @@ void collectAndSendSensorData(){
   sendDataPacket(createSensorDataPacket(temperatur, 1));
   sendDataPacket(createSensorDataPacket(humidity, 2));
   getLightIntensity();
-  sendDataPacket(createSensorDataPacket(lumen, 3));
+  sendDataPacket(createSensorDataPacket(lux, 3));
   getPressure();
   sendDataPacket(createSensorDataPacket(pressure, 4));
   
@@ -244,16 +249,39 @@ void sendDataPacket(dataPacket t_dataPacket){
   Serial.print("Paket senden: \t");
   ausgabeDataPacket(t_dataPacket);
   
+  dataPacketEncoded encodedMessage;
+  encodedMessage = encodiereDaten(t_dataPacket);
   radio.SensorknotenIoT_resetRegister();
 
-  radio.write( &t_dataPacket, sizeof(t_dataPacket));
+  radio.write( &encodedMessage.message, sizeof(encodedMessage.message));
   for(int retry = 0; retry <= 5; retry++){
-    radio.write( &t_dataPacket, sizeof(t_dataPacket));
+    radio.write( &encodedMessage.message, sizeof(encodedMessage.message));
     //radio.reUseTX();
    delayMicroseconds(160);
   } 
 
    
+}
+
+dataPacketEncoded encodiereDaten(dataPacket  t_dataPacket){
+  char encoded[base64_enc_len(sizeof(t_dataPacket))];
+  char dataToEncode[sizeof(t_dataPacket)]; 
+  memcpy(&dataToEncode, &t_dataPacket, sizeof(t_dataPacket)); 
+  base64_encode(encoded, dataToEncode, sizeof(dataToEncode));
+  dataPacketEncoded t_dataPacketEncoded;
+  memcpy(&t_dataPacketEncoded.message, &encoded, sizeof(encoded));
+  return t_dataPacketEncoded;
+}
+
+
+dataPacket decodingData(dataPacketEncoded  t_dataPacketEncoded){
+  int input2Len = sizeof(t_dataPacketEncoded.message);
+  int decodedLen = base64_dec_len(t_dataPacketEncoded.message, input2Len);
+  char decoded[decodedLen];
+  base64_decode(decoded, t_dataPacketEncoded.message, input2Len);
+  dataPacket  t_dataPacket;
+  memcpy(&t_dataPacket, &decoded, sizeof(decoded));
+  return t_dataPacket;
 }
 
 void processData(dataPacket t_dataPacket){
@@ -391,7 +419,7 @@ void ausgabeDataPacket(dataPacket t_dataPacket){
 }
  void initRadio(){
       radio.begin();
-      radio.setPayloadSize(sizeof(dataPacket));  //Groesse der gesendeten Daten
+      radio.setPayloadSize(base64_enc_len(sizeof(dataPacket)));  //Groesse der gesendeten Daten
       radio.enableDynamicPayloads();
       radio.setAutoAck(true); 
       radio.setDataRate(RF24_250KBPS); //250kbs
