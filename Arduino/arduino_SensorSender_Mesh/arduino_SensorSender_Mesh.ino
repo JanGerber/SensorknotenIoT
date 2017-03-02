@@ -33,6 +33,12 @@
   //BPM 180
   Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085);
   int pressure;
+  boolean bpm180Connected;
+
+  //Bewegungsmelder
+  const byte interruptPinMotionDetect = 3;
+  boolean motion;
+  boolean firstTimeMotion;
 
   // NRF24L01
   RF24 radio(9,10);
@@ -95,11 +101,19 @@ void setup() {
   //DHT22
   dht.begin();
   LightSensor.begin();
+  lux = NULL;
 
   if(!bmp.begin())
   {
     Serial.println("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
+    bpm180Connected = false; 
+  }else{
+    bpm180Connected = true;
   }
+  
+  //Bewegungsmelder
+  motion = false;
+  firstTimeMotion = false;
 
 
   Serial.println("init Radio");
@@ -113,10 +127,6 @@ void setup() {
     EEPROM.write(i, 0);
    } 
    */
-
- 
-  
-  Serial.print(radio.getChannel());
   
   addressTimeId = 1;
   timeId = EEPROMReadlong(addressTimeId);
@@ -143,6 +153,8 @@ void setup() {
   TCCR1B |= (1 << CS10); 
   TIMSK1 |= (1 << TOIE1);   // enable timer overflow interrupt
   interrupts();             // enable all interrupts
+  
+  attachInterrupt(digitalPinToInterrupt(interruptPinMotionDetect), interruptMotionDetector, RISING);
     
 }
 
@@ -164,6 +176,12 @@ ISR(TIMER1_OVF_vect)          // timer compare interrupt service routine
     
   }
 }
+void interruptMotionDetector(){  
+  motion = true;
+  firstTimeMotion = true;
+}
+
+
 
 void loop() {
     dataPacket t_DataPacket_Loop;
@@ -194,10 +212,19 @@ void collectAndSendSensorData(){
   getTemperatureHumidty();
   sendDataPacket(createSensorDataPacket(temperatur, 1));
   sendDataPacket(createSensorDataPacket(humidity, 2));
+  
   getLightIntensity();
-  sendDataPacket(createSensorDataPacket(lux, 3));
-  getPressure();
-  sendDataPacket(createSensorDataPacket(pressure, 4));
+  if(54612 != lux){
+    sendDataPacket(createSensorDataPacket(lux, 3));
+  }
+  if(true == bpm180Connected){
+    getPressure();
+    sendDataPacket(createSensorDataPacket(pressure, 4));
+  }
+  if(true == firstTimeMotion){
+    sendDataPacket(createSensorDataPacket(getAndResetMotionSensor(), 5));
+  }
+  
   
   delay(100);
   radio.startListening();
@@ -208,17 +235,22 @@ void getTemperatureHumidty(){
   temperatur = dht.readTemperature();  
 }
 void getLightIntensity(){  
-  Serial.print("Lux: \t");
+  //Serial.print("Lux: \t");
   lux = LightSensor.readLightLevel(); 
-  Serial.println(lux);
+  //Serial.println(lux);
+}
+boolean getAndResetMotionSensor(){ 
+  boolean motionSensor = motion;
+  motion = false;
+  return motionSensor;
 }
 
 void getPressure(){
   sensors_event_t event;
   bmp.getEvent(&event);
   pressure = event.pressure; 
-  Serial.print("Pressure: \t");
-  Serial.println(pressure);
+  //Serial.print("Pressure: \t");
+  // Serial.println(pressure);
 }
 
 
@@ -246,7 +278,7 @@ dataPacket createSensorDataPacket(float value, int unit){
 }
 
 void sendDataPacket(dataPacket t_dataPacket){
-  Serial.print("Paket senden: \t");
+  Serial.print("Paket senden: \t \t");
   ausgabeDataPacket(t_dataPacket);
   
   dataPacketEncoded encodedMessage;
@@ -429,6 +461,8 @@ void ausgabeDataPacket(dataPacket t_dataPacket){
       radio.setCRCLength(RF24_CRC_16);
       radio.openWritingPipe(addresses[0]);
       radio.openReadingPipe(1,addresses[0]); //1
+      printf_begin();
+      radio.printDetails();
   }
 
 
