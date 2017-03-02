@@ -11,111 +11,204 @@
 #include <AESLib.h>
 #include <math.h>
 #include <Base64.h>
+#include <printf.h>
+#include <BH1750.h>
 
 //Konstanten und Variablen
 
   //ID des Arduinos
-  const int arduinoId = 400;
+  unsigned int arduinoId = 9999;
   
 
   //DHT22
   #define DHTPIN 4     // what pin we're connected to
-  #define DHTTYPE DHT22   // DHT 22  (AM2302)
+  #define DHTTYPE DHT22  // DHT 22  (AM2302)
   DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
   float humidity;
   float temperatur;
+  
+  BH1750 LightSensor;
+  float lux;
     
   //BPM 180
   Adafruit_BMP085_Unified bmp = Adafruit_BMP085_Unified(10085);
   int pressure;
+  boolean bpm180Connected;
+
+  //Bewegungsmelder
+  const byte interruptPinMotionDetect = 3;
+  boolean motion;
+  boolean firstTimeMotion;
 
   // NRF24L01
   RF24 radio(9,10);
   // Example below using pipe5 for writing
-  const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0x7365727631LL };
+  uint8_t addresses[][6] = {"1Node","2Node"};
    
-  char receivePayload[32];
+  //char receivePayload[32];
   unsigned long timeId;
   long addressTimeId;
 
-  //Verschluesselung AES
-  uint8_t key[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'};
+  unsigned int messageId;
+  int addressMessageId;
+
+  const int SIZEBLACKLIST = 50;
+  unsigned long blacklist[SIZEBLACKLIST];
+  int listPointer = 0;
   
-  
-  //
+
+  //Sensor Daten
   struct sensorData{
-    int id;
+    unsigned  int id;
     float value;
     int unit;
     unsigned long timeId;
   };
 
-  struct secureMessage{
-    char message [16];
+  //Mesh Daten Paket
+  struct dataPacket{
+    unsigned int destinationAddr;
+    unsigned int originAddr;
+    unsigned int lastHopAddr;
+    unsigned int messageId;
+    sensorData data; 
   };
+    //Mesh Daten Paket
+  struct dataPacketEncoded{
+    char message[28];
+  };
+
+
+  long startTime; // millis-Wert beim ersten Drücken der Taste
+  long duration;  // Variable für die Dauer
+  int countTimer = 0;
+
+  boolean interruptHappened;
+
   
-void setup() {
+void setup() {  
   Serial.begin(9600);  
+/*
+  EEPROMWriteInt(12, 100);
+  delay(500);
+*/
+  interruptHappened = false; 
+  
+  arduinoId = EEPROMReadInt(12);
+  delay(500);
+
   
   //DHT22
   dht.begin();
+  LightSensor.begin();
+  lux = NULL;
 
-  //BMP 180
-  /* Initialise the sensor */
   if(!bmp.begin())
   {
     Serial.println("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
+    bpm180Connected = false; 
+  }else{
+    bpm180Connected = true;
   }
+  
+  //Bewegungsmelder
+  motion = false;
+  firstTimeMotion = false;
+
 
   Serial.println("init Radio");
   //nRF24L01
-  radio.begin();
-  radio.setPayloadSize(sizeof(secureMessage));  //Groesse der gesendeten Daten
-  radio.setAutoAck(1); 
-  radio.setDataRate(RF24_250KBPS); //250kbs
-  radio.setPALevel(RF24_PA_MAX);
-  radio.setChannel(90);
-  radio.setRetries(15,15);
-  radio.setCRCLength(RF24_CRC_16);
-  radio.openWritingPipe(pipes[0]);
-  radio.openReadingPipe(1,pipes[1]);
 
-  Serial.println(radio.getChannel());
-
+  initRadio();
+  
+  //EEPROM komplett loeschen
+  /*
+   for (int i = 0 ; i < EEPROM.length() ; i++) {
+    EEPROM.write(i, 0);
+   } 
+   */
+  
   addressTimeId = 1;
   timeId = EEPROMReadlong(addressTimeId);
+  delay(1000);
+
+  Serial.print("timeId ID: \t");
+  Serial.println(timeId);
+  addressMessageId = 8;
+ // addressMessageId += sizeof(addressMessageId);
+  messageId = (int) EEPROMReadInt(addressMessageId);
+  Serial.print("Message ID: \t");
+  Serial.println(messageId);
+
+  
+  //attachInterrupt(digitalPinToInterrupt(interruptPinMotionDetect), interruptMotionDetector, RISING);
+    
 }
 
-void loop() {
 
+
+void interruptMotionDetector(){  
+  motion = true;
+  firstTimeMotion = true;
+}
+
+
+
+void loop() {
   long start;
   long dauer;
-
-
-   start = millis();
-   getTemperatureHumidty();
-   getPressure();
-   getLuminosity();  
-   sendOverRadio();
-
+  start = millis();
+  
+   radio.powerUp();
+   collectAndSendSensorData();
+   radio.powerDown();
+   
    dauer = millis() - start;
    Serial.print("Dauer: ");
    Serial.print(dauer);
    Serial.println(" ms");
-   serielleAusgabe();
-   delay(100);
-
+   delay(400);
+    
    for(int i = 0; i < 8; i++)
    {
      LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
    }
-   
-   
+}
+
+void collectAndSendSensorData(){
+  timeId++;
+  EEPROMWritelong(addressTimeId, timeId);
+  
+  getTemperatureHumidty();
+  sendDataPacket(createSensorDataPacket(temperatur, 1));
+  sendDataPacket(createSensorDataPacket(humidity, 2));
+  
+  getLightIntensity();
+  if(54612 != lux){
+    sendDataPacket(createSensorDataPacket(lux, 3));
+  }
+  if(true == bpm180Connected){
+    getPressure();
+    sendDataPacket(createSensorDataPacket(pressure, 4));
+  }
+  if(true == firstTimeMotion){
+    sendDataPacket(createSensorDataPacket(getAndResetMotionSensor(), 5));
+  }
 }
 
 void getTemperatureHumidty(){  
   humidity = dht.readHumidity(); 
   temperatur = dht.readTemperature();  
+}
+void getLightIntensity(){  
+  //Serial.print("Lux: \t");
+  lux = LightSensor.readLightLevel(); 
+  //Serial.println(lux);
+}
+boolean getAndResetMotionSensor(){ 
+  boolean motionSensor = motion;
+  motion = false;
+  return motionSensor;
 }
 
 void getPressure(){
@@ -124,61 +217,108 @@ void getPressure(){
   pressure = event.pressure; 
 }
 
-void getLuminosity(){
 
-}
+dataPacket createSensorDataPacket(float value, int unit){
 
-void sendData(sensorData t_sensorData) {
-  secureMessage message;
-  message = verschluessleData(t_sensorData);
-
-  int attempts  = 0;
-  for(int retry = 0; retry <= 60; retry++){
-   if (radio.write( &message, sizeof(message) )){
-       Serial.print("Break:");
-       Serial.print(t_sensorData.unit);
-       break; 
-   }
-   delayMicroseconds(130);
-   attempts++;
-}
-  Serial.print(" \tAttempts: ");
-  Serial.println(attempts);
-  
-}
-
-void sendOverRadio(){
- radio.powerUp(); 
-  
-  
+  //Sensor Daten uebernehmen
   sensorData t_sensorData;
-  timeId++;
-  EEPROMWritelong(addressTimeId, timeId);
+
   t_sensorData.timeId = timeId;
   t_sensorData.id = arduinoId;
+  t_sensorData.value = value;
+  t_sensorData.unit = unit;
+
+  //Packet erstellen
+  dataPacket t_dataPacket;
+  t_dataPacket.destinationAddr = 1;
+  t_dataPacket.originAddr = arduinoId;
+  messageId++;
+  EEPROMWriteInt(addressMessageId, messageId);
+  t_dataPacket.messageId = messageId;
+  t_dataPacket.lastHopAddr = 0;
+  t_dataPacket.data = t_sensorData; 
   
-  if(!isnan(temperatur)){
-    t_sensorData.value = temperatur;
-    t_sensorData.unit = 1;
-    sendData(t_sensorData);
-   // temperatur = NAN;
-  }
-  delay(3);
-  if(!isnan(humidity)){
-    t_sensorData.value = humidity;
-    t_sensorData.unit = 2;
-    sendData(t_sensorData);
-   // humidity = NAN;
-  }
-  delay(3);
-  if(!isnan(pressure)){
-    t_sensorData.value = pressure;
-    t_sensorData.unit = 3;
-    sendData(t_sensorData);
-   // pressure = NAN;
-  }
-  radio.powerDown();
+  return t_dataPacket;
 }
+
+void sendDataPacket(dataPacket t_dataPacket){
+  Serial.print("Paket senden: \t \t");
+  ausgabeDataPacket(t_dataPacket);
+  
+  dataPacketEncoded encodedMessage;
+  encodedMessage = encodiereDaten(t_dataPacket);
+  radio.SensorknotenIoT_resetRegister();
+
+  radio.write( &encodedMessage.message, sizeof(encodedMessage.message));
+  for(int retry = 0; retry <= 5; retry++){
+    radio.write( &encodedMessage.message, sizeof(encodedMessage.message));
+    //radio.reUseTX();
+   delayMicroseconds(160);
+  } 
+
+   
+}
+
+dataPacketEncoded encodiereDaten(dataPacket  t_dataPacket){
+  char encoded[base64_enc_len(sizeof(t_dataPacket))];
+  char dataToEncode[sizeof(t_dataPacket)]; 
+  memcpy(&dataToEncode, &t_dataPacket, sizeof(t_dataPacket)); 
+  base64_encode(encoded, dataToEncode, sizeof(dataToEncode));
+  dataPacketEncoded t_dataPacketEncoded;
+  memcpy(&t_dataPacketEncoded.message, &encoded, sizeof(encoded));
+  return t_dataPacketEncoded;
+}
+
+
+dataPacket decodingData(dataPacketEncoded  t_dataPacketEncoded){
+  int input2Len = sizeof(t_dataPacketEncoded.message);
+  int decodedLen = base64_dec_len(t_dataPacketEncoded.message, input2Len);
+  char decoded[decodedLen];
+  base64_decode(decoded, t_dataPacketEncoded.message, input2Len);
+  dataPacket  t_dataPacket;
+  memcpy(&t_dataPacket, &decoded, sizeof(decoded));
+  return t_dataPacket;
+}
+
+void processData(dataPacket t_dataPacket){
+  if(!(t_dataPacket.destinationAddr == arduinoId)){
+     unsigned long uniqueMessageId = (unsigned long) ((unsigned long) t_dataPacket.originAddr << 16) +  (unsigned long) t_dataPacket.messageId;
+     
+     if(!compareToList(uniqueMessageId)){
+         insertInList(uniqueMessageId);
+         t_dataPacket.lastHopAddr = arduinoId;
+         sendDataPacket(t_dataPacket);
+     }else{
+        //Message verwefen
+        Serial.println("Message verworfen");
+     }    
+  }else{
+    //Arduino ist Empfaenger
+    Serial.print("Arduino ist Empfaenger: \t");
+    ausgabeDataPacket(t_dataPacket);
+  }
+}
+
+void decrementPoiter() {
+    if(listPointer < SIZEBLACKLIST )
+        listPointer++;
+    else
+        listPointer=0;       
+}
+
+boolean compareToList(unsigned long uniqueMessageId){
+   for (int i=0; i<  (SIZEBLACKLIST - 1); i++) {
+        if (uniqueMessageId==blacklist[i])
+            return true;
+    }
+  return false;
+  
+}
+void insertInList(unsigned long uniqueMessageId){
+    blacklist[listPointer]= uniqueMessageId;
+    decrementPoiter();
+}
+
 
 void EEPROMWritelong(int address, long value){
       //Decomposition from a long to 4 bytes by using bitshift.
@@ -195,7 +335,7 @@ void EEPROMWritelong(int address, long value){
       EEPROM.write(address + 3, one);
 }
 
-long EEPROMReadlong(long address)
+long EEPROMReadlong(int address)
 {
       //Read the 4 bytes from the eeprom memory.
       long four = EEPROM.read(address);
@@ -206,35 +346,28 @@ long EEPROMReadlong(long address)
       //Return the recomposed long by using bitshift.
       return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF) + ((two << 16) & 0xFFFFFF) + ((one << 24) & 0xFFFFFFFF);
 }
+void EEPROMWriteInt(int address, int value){
+      //Decomposition from a long to 4 bytes by using bitshift.
+      //One = Most significant -> Four = Least significant byte
+      byte two = (value & 0xFF);
+      byte one = ((value >> 8) & 0xFF);
 
-secureMessage verschluessleData(sensorData  data){
-  secureMessage message;
-  memcpy(&message.message, &data, sizeof(data));
- 
-  char encoded[base64_enc_len(sizeof(data))];
-  char dataToEncode[sizeof(data)];
- 
-  memcpy(&dataToEncode, &data, sizeof(data));
-  
-  base64_encode(encoded, dataToEncode, sizeof(dataToEncode));
-
-  memcpy(&message.message, &encoded, sizeof(encoded)); 
-  
-  /*
-  char keyEncoded[base64_enc_len(sizeof(key))];
-  
-  memcpy(&keyForAes, &keyEncoded, sizeof(keyEncoded));
-  
-  base64_encode(keyEncoded, key, sizeof(key));
-
-  uint8_t keyForAes[sizeof(keyEncoded)];
-  memcpy(&keyForAes, &keyEncoded, sizeof(keyEncoded));
-  aes256_enc_single(keyForAes, message.message);
-
-  */
-
-  return message;
+      //Write the 4 bytes into the eeprom memory.
+      EEPROM.write(address, two);
+      EEPROM.write(address + 1, one);
 }
+
+int EEPROMReadInt(int address)
+{
+      //Read the 4 bytes from the eeprom memory.
+      long four = EEPROM.read(address);
+      long three = EEPROM.read(address + 1);
+
+      //Return the recomposed long by using bitshift.
+      return ((four << 0) & 0xFF) + ((three << 8) & 0xFFFF);
+}
+
+
 
 void serielleAusgabe(){
     Serial.print("Luftfeuchte: ");
@@ -265,8 +398,36 @@ void ausgabeSensorData(sensorData t_sensorData){
         Serial.print("TimeId: ");
         Serial.println(t_sensorData.timeId);// Get the payload
 }
-
-
+void ausgabeDataPacket(dataPacket t_dataPacket){
+    Serial.print("Destination Addr: ");
+    Serial.print(t_dataPacket.destinationAddr);
+    Serial.print(" \t");
+    Serial.print("Origin Addr: ");
+    Serial.print(t_dataPacket.originAddr);
+    Serial.print(" \t");
+    Serial.print("Last Hop Addr: ");
+    Serial.print(t_dataPacket.lastHopAddr);// Get the payload
+    Serial.print(" \t");
+    Serial.print("MessageID: ");
+    Serial.print(t_dataPacket.messageId);// Get the payload
+    Serial.print(" \t");
+    ausgabeSensorData(t_dataPacket.data);
+}
+ void initRadio(){
+      radio.begin();
+      radio.setPayloadSize(base64_enc_len(sizeof(dataPacket)));  //Groesse der gesendeten Daten
+      radio.enableDynamicPayloads();
+      radio.setAutoAck(true); 
+      radio.setDataRate(RF24_250KBPS); //250kbs
+      radio.setPALevel(RF24_PA_HIGH);
+      radio.setChannel(90);
+      radio.setRetries(15,15);
+      radio.setCRCLength(RF24_CRC_16);
+      radio.openWritingPipe(addresses[0]);
+      radio.openReadingPipe(1,addresses[0]); //1
+      printf_begin();
+      radio.printDetails();
+  }
 
 
 
