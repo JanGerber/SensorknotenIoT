@@ -146,3 +146,25 @@ uint16_t BH1750::readLightLevel(void) {
   return level;
 
 }
+void BH1750::powerDown() {
+
+      // Send mode to sensor
+      Wire.beginTransmission(BH1750_I2CADDR);
+      __wire_write(BH1750_POWER_DOWN);
+      Wire.endTransmission();
+	  
+      _delay_ms(10);
+
+
+}
+void BH1750::powerUp() {
+
+      // Send mode to sensor
+      Wire.beginTransmission(BH1750_I2CADDR);
+      __wire_write(BH1750_POWER_ON);
+      Wire.endTransmission();
+	  
+      _delay_ms(10);
+
+
+}

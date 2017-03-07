@@ -13,6 +13,8 @@
 #include <Base64.h>
 #include <printf.h>
 #include <BH1750.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 //Konstanten und Variablen
 
@@ -20,7 +22,7 @@
   unsigned int arduinoId = 9999;
 
   //Energiesparen
-  const boolean energySaving = false;
+  const boolean energySaving = true;
   
 
   //DHT22
@@ -45,7 +47,24 @@
 
   //Bodenfeuchtigkeit
   boolean soilMoistureDigital;
+  #define soilMoistureDigitalPin 5
+  #define soilMoistureAnalogPin 6
   float soilMoistureAnalog;
+
+  //OneWire
+  #define ONE_WIRE_BUS 6
+  OneWire oneWire(ONE_WIRE_BUS);
+  DallasTemperature oneWireDallas(&oneWire);
+
+  //Reed Kontakt kein Interrupt
+  #define REED_CONTACT_NOINT_PIN 7
+  boolean reedContactNoInterrupt;
+  boolean firstTimeConntectNoInt;
+
+  //Reed Kontakt mit Interrupt
+  #define REED_CONTACT_WITHINT_PIN 2
+  boolean firstTimeConntectWithInt;
+  boolean reedContactWithInterrupt;
 
 
   // NRF24L01
@@ -112,7 +131,6 @@ void setup() {
 
   if(!bmp.begin())
   {
-    Serial.println("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
     bpm180Connected = false; 
   }else{
     bpm180Connected = true;
@@ -122,6 +140,17 @@ void setup() {
   motion = false;
   firstTimeMotion = false;
 
+  //Bodenfeuchtigkeit
+   pinMode(soilMoistureDigitalPin, INPUT); 
+   soilMoistureAnalog = 0;
+
+  //OneWire
+  oneWire.reset();
+  oneWireDallas.begin();
+
+  //Reed Kontakt
+  firstTimeConntectNoInt = false;
+  firstTimeConntectWithInt = false;
 
   Serial.println("init Radio");
   //nRF24L01
@@ -162,7 +191,9 @@ void setup() {
     TIMSK1 |= (1 << TOIE1);   // enable timer overflow interrupt
     interrupts();             // enable all interrupts
   }
+  
   attachInterrupt(digitalPinToInterrupt(interruptPinMotionDetect), interruptMotionDetector, RISING);
+  attachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN), interruptContactDetector, CHANGE);
     
 }
 
@@ -188,11 +219,17 @@ void interruptMotionDetector(){
   motion = true;
   firstTimeMotion = true;
 }
+void interruptContactDetector(){
+  Serial.println("Interrupt");
+  detachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN));   
+  reedContactWithInterrupt = !reedContactWithInterrupt;
+  firstTimeConntectWithInt = true;
+}
 
 
 
 void loop() {
-    if(energySaving == true {
+    if(energySaving == true) {
         long start;
         long dauer;
         start = millis();
@@ -207,7 +244,7 @@ void loop() {
          Serial.println(" ms");
          delay(400);
           
-         for(int i = 0; i < 8; i++)
+         for(int i = 0; i < 2; i++)
          {
            LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
          }
@@ -233,7 +270,7 @@ void loop() {
 }
 
 void collectAndSendSensorData(){
-  if{energySaving == false){
+  if(energySaving == false){
     radio.stopListening();
     delay(100);
   }
@@ -255,8 +292,26 @@ void collectAndSendSensorData(){
   if(true == firstTimeMotion){
     sendDataPacket(createSensorDataPacket(getAndResetMotionSensor(), 5));
   }
+  getSoilMoisture();
+  if(soilMoistureAnalog){
+    sendDataPacket(createSensorDataPacket(soilMoistureAnalog, 6));
+    sendDataPacket(createSensorDataPacket(soilMoistureDigital, 7));
+  }
+  getOneWireTemperature();
+  for(int i = 0; i < oneWireDallas.getDeviceCount() && i <= 99 ;i++){
+    
+    sendDataPacket(createSensorDataPacket(oneWireDallas.getTempCByIndex(i), (100 + i) ));
+  }
   
-  f{energySaving == false){
+  getReedContactNoInt();
+  if(true == firstTimeConntectNoInt){
+    sendDataPacket(createSensorDataPacket(reedContactNoInterrupt, 8));
+  }
+  if (true == firstTimeConntectWithInt){
+    sendDataPacket(createSensorDataPacket(getAndResetReedContactSensor(), 9));
+  }
+  
+  if(energySaving == false){
     delay(100);
     radio.startListening();
   }
@@ -284,6 +339,26 @@ void getPressure(){
   pressure = event.pressure; 
   //Serial.print("Pressure: \t");
   // Serial.println(pressure);
+}
+void getSoilMoisture(){  
+  soilMoistureAnalog = analogRead(soilMoistureAnalogPin); 
+  soilMoistureDigital = digitalRead(soilMoistureDigitalPin);  
+}
+void getOneWireTemperature(){
+  oneWireDallas.requestTemperatures();
+  delay(10);
+}
+void getReedContactNoInt(){  
+   reedContactNoInterrupt = digitalRead(REED_CONTACT_NOINT_PIN);
+   if(true == reedContactNoInterrupt){
+    firstTimeConntectNoInt = true;  
+   }
+}
+boolean getAndResetReedContactSensor(){ 
+  boolean reedContactSensor = reedContactWithInterrupt;
+  reedContactWithInterrupt = !reedContactWithInterrupt;
+  attachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN), interruptContactDetector, CHANGE);
+  return reedContactSensor;
 }
 
 

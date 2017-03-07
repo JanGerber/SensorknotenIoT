@@ -39,6 +39,7 @@
   const byte interruptPinMotionDetect = 3;
   boolean motion;
   boolean firstTimeMotion;
+  
   //Bodenfeuchtigkeit
   boolean soilMoistureDigital;
   float soilMoistureAnalog;
