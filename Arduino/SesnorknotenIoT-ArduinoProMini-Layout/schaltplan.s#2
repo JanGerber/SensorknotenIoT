@@ -4795,8 +4795,8 @@ distributor RS Components</description>
 <part name="S1" library="switch" deviceset="320-916" device=""/>
 <part name="REED-SCHALTER1" library="pinhead" deviceset="PINHD-1X2" device=""/>
 <part name="ARDUINO-PRO-MINI" library="diy-modules" deviceset="ARDUINO-PRO-MINI-*#NP" device="" technology="5.0V" value=""/>
-<part name="IN" library="pinhead" deviceset="PINHD-1X2" device="" value="5V"/>
-<part name="OUT" library="pinhead" deviceset="PINHD-1X2" device="" value="3.3V"/>
+<part name="IN-5V" library="pinhead" deviceset="PINHD-1X2" device=""/>
+<part name="OUT-3.3V" library="pinhead" deviceset="PINHD-1X2" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4817,8 +4817,8 @@ distributor RS Components</description>
 <instance part="S1" gate="1" x="71.12" y="106.68" rot="R270"/>
 <instance part="REED-SCHALTER1" gate="G$1" x="48.26" y="116.84" rot="R90"/>
 <instance part="ARDUINO-PRO-MINI" gate="G$1" x="63.5" y="38.1"/>
-<instance part="IN" gate="G$1" x="109.22" y="-27.94"/>
-<instance part="OUT" gate="G$1" x="114.3" y="-25.4" rot="R180"/>
+<instance part="IN-5V" gate="G$1" x="109.22" y="-27.94"/>
+<instance part="OUT-3.3V" gate="G$1" x="114.3" y="-25.4" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -4842,7 +4842,54 @@ distributor RS Components</description>
 <wire x1="78.74" y1="116.84" x2="78.74" y2="121.92" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="IN-3.3V" class="0">
+<segment>
+<pinref part="ARDUINO-PRO-MINI" gate="G$1" pin="VCC"/>
+<wire x1="81.28" y1="43.18" x2="96.52" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="43.18" x2="96.52" y2="-25.4" width="0.1524" layer="91"/>
+<pinref part="IN-5V" gate="G$1" pin="1"/>
+<wire x1="96.52" y1="-25.4" x2="106.68" y2="-25.4" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="43.18" x2="96.52" y2="88.9" width="0.1524" layer="91"/>
+<junction x="96.52" y="43.18"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="96.52" y1="88.9" x2="30.48" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="88.9" x2="30.48" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="104.14" x2="30.48" y2="109.22" width="0.1524" layer="91"/>
+<junction x="30.48" y="104.14"/>
+<pinref part="1-WIRE" gate="A" pin="3"/>
+<wire x1="30.48" y1="109.22" x2="22.86" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="22.86" y1="109.22" x2="22.86" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="88.9" x2="-2.54" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="-2.54" y1="88.9" x2="-2.54" y2="86.36" width="0.1524" layer="91"/>
+<junction x="30.48" y="88.9"/>
+<pinref part="MOTION-PIR" gate="G$1" pin="VCC"/>
+<wire x1="-2.54" y1="86.36" x2="-10.16" y2="86.36" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="GND" class="0">
+<segment>
+<pinref part="OUT-3.3V" gate="G$1" pin="1"/>
+<wire x1="116.84" y1="-27.94" x2="142.24" y2="-27.94" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="-27.94" x2="142.24" y2="12.7" width="0.1524" layer="91"/>
+<pinref part="BMP180" gate="A" pin="5"/>
+<wire x1="142.24" y1="12.7" x2="162.56" y2="12.7" width="0.1524" layer="91"/>
+<pinref part="BH1750" gate="A" pin="5"/>
+<wire x1="162.56" y1="40.64" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="40.64" x2="142.24" y2="12.7" width="0.1524" layer="91"/>
+<junction x="142.24" y="12.7"/>
+<pinref part="DHT22" gate="G$1" pin="GND"/>
+<wire x1="162.56" y1="71.12" x2="142.24" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="71.12" x2="142.24" y2="50.8" width="0.1524" layer="91"/>
+<junction x="142.24" y="40.64"/>
+<pinref part="BODEN-FEUCHT" gate="A" pin="3"/>
+<wire x1="142.24" y1="50.8" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="132.08" y1="114.3" x2="132.08" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="132.08" y1="71.12" x2="142.24" y2="71.12" width="0.1524" layer="91"/>
+<junction x="142.24" y="71.12"/>
+<pinref part="BH1750" gate="A" pin="1"/>
+<wire x1="162.56" y1="50.8" x2="142.24" y2="50.8" width="0.1524" layer="91"/>
+<junction x="142.24" y="50.8"/>
+</segment>
 <segment>
 <pinref part="BATTERIE" gate="G$1" pin="2"/>
 <wire x1="81.28" y1="121.92" x2="81.28" y2="104.14" width="0.1524" layer="91"/>
@@ -4851,7 +4898,7 @@ distributor RS Components</description>
 <pinref part="ARDUINO-PRO-MINI" gate="G$1" pin="GND.2"/>
 <wire x1="93.98" y1="91.44" x2="93.98" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="48.26" x2="81.28" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="IN" gate="G$1" pin="2"/>
+<pinref part="IN-5V" gate="G$1" pin="2"/>
 <wire x1="106.68" y1="-27.94" x2="93.98" y2="-27.94" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="-27.94" x2="93.98" y2="12.7" width="0.1524" layer="91"/>
 <junction x="93.98" y="48.26"/>
@@ -4878,55 +4925,6 @@ distributor RS Components</description>
 <junction x="0" y="43.18"/>
 </segment>
 </net>
-<net name="N$4" class="0">
-<segment>
-<pinref part="ARDUINO-PRO-MINI" gate="G$1" pin="VCC"/>
-<wire x1="81.28" y1="43.18" x2="96.52" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="43.18" x2="96.52" y2="-25.4" width="0.1524" layer="91"/>
-<pinref part="IN" gate="G$1" pin="1"/>
-<wire x1="96.52" y1="-25.4" x2="106.68" y2="-25.4" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="43.18" x2="96.52" y2="88.9" width="0.1524" layer="91"/>
-<junction x="96.52" y="43.18"/>
-<pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="96.52" y1="88.9" x2="30.48" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="88.9" x2="30.48" y2="104.14" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="104.14" x2="30.48" y2="109.22" width="0.1524" layer="91"/>
-<junction x="30.48" y="104.14"/>
-<pinref part="1-WIRE" gate="A" pin="3"/>
-<wire x1="30.48" y1="109.22" x2="22.86" y2="109.22" width="0.1524" layer="91"/>
-<wire x1="22.86" y1="109.22" x2="22.86" y2="114.3" width="0.1524" layer="91"/>
-<wire x1="30.48" y1="88.9" x2="-2.54" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="-2.54" y1="88.9" x2="-2.54" y2="86.36" width="0.1524" layer="91"/>
-<junction x="30.48" y="88.9"/>
-<pinref part="MOTION-PIR" gate="G$1" pin="VCC"/>
-<wire x1="-2.54" y1="86.36" x2="-10.16" y2="86.36" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="GND" class="0">
-<segment>
-<pinref part="OUT" gate="G$1" pin="1"/>
-<wire x1="116.84" y1="-27.94" x2="142.24" y2="-27.94" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="-27.94" x2="142.24" y2="12.7" width="0.1524" layer="91"/>
-<pinref part="BMP180" gate="A" pin="5"/>
-<wire x1="142.24" y1="12.7" x2="162.56" y2="12.7" width="0.1524" layer="91"/>
-<pinref part="BH1750" gate="A" pin="5"/>
-<wire x1="162.56" y1="40.64" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="40.64" x2="142.24" y2="12.7" width="0.1524" layer="91"/>
-<junction x="142.24" y="12.7"/>
-<pinref part="DHT22" gate="G$1" pin="GND"/>
-<wire x1="162.56" y1="71.12" x2="142.24" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="71.12" x2="142.24" y2="50.8" width="0.1524" layer="91"/>
-<junction x="142.24" y="40.64"/>
-<pinref part="BODEN-FEUCHT" gate="A" pin="3"/>
-<wire x1="142.24" y1="50.8" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="132.08" y1="114.3" x2="132.08" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="132.08" y1="71.12" x2="142.24" y2="71.12" width="0.1524" layer="91"/>
-<junction x="142.24" y="71.12"/>
-<pinref part="BH1750" gate="A" pin="1"/>
-<wire x1="162.56" y1="50.8" x2="142.24" y2="50.8" width="0.1524" layer="91"/>
-<junction x="142.24" y="50.8"/>
-</segment>
-</net>
 <net name="3.3V" class="0">
 <segment>
 <pinref part="DHT22" gate="G$1" pin="VDD"/>
@@ -4937,7 +4935,7 @@ distributor RS Components</description>
 <pinref part="BMP180" gate="A" pin="4"/>
 <wire x1="162.56" y1="15.24" x2="139.7" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="15.24" x2="139.7" y2="5.08" width="0.1524" layer="91"/>
-<pinref part="OUT" gate="G$1" pin="2"/>
+<pinref part="OUT-3.3V" gate="G$1" pin="2"/>
 <wire x1="139.7" y1="5.08" x2="139.7" y2="-25.4" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="-25.4" x2="116.84" y2="-25.4" width="0.1524" layer="91"/>
 <pinref part="BH1750" gate="A" pin="4"/>

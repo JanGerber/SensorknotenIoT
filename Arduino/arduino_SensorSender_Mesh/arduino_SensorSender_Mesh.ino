@@ -18,6 +18,9 @@
 
   //ID des Arduinos
   unsigned int arduinoId = 9999;
+
+  //Energiesparen
+  const boolean energySaving = false;
   
 
   //DHT22
@@ -39,6 +42,11 @@
   const byte interruptPinMotionDetect = 3;
   boolean motion;
   boolean firstTimeMotion;
+
+  //Bodenfeuchtigkeit
+  boolean soilMoistureDigital;
+  float soilMoistureAnalog;
+
 
   // NRF24L01
   RF24 radio(9,10);
@@ -100,7 +108,6 @@ void setup() {
   
   //DHT22
   dht.begin();
-  LightSensor.begin();
   lux = NULL;
 
   if(!bmp.begin())
@@ -139,21 +146,22 @@ void setup() {
   messageId = (int) EEPROMReadInt(addressMessageId);
   Serial.print("Message ID: \t");
   Serial.println(messageId);
-  
-  collectAndSendSensorData();
-  radio.startListening();
 
-  // initialize timer1 
-  noInterrupts();           // disable all interrupts
-  TCCR1A = 0;
-  TCCR1B = 0;
-
-  TCNT1 = 0;            // preload timer 65536-16MHz/256/2Hz
-  TCCR1B |= (1 << CS12);    // 256 prescaler 
-  TCCR1B |= (1 << CS10); 
-  TIMSK1 |= (1 << TOIE1);   // enable timer overflow interrupt
-  interrupts();             // enable all interrupts
+  if(energySaving == false){
+    collectAndSendSensorData();
+    radio.startListening();
   
+    // initialize timer1 
+    noInterrupts();           // disable all interrupts
+    TCCR1A = 0;
+    TCCR1B = 0;
+  
+    TCNT1 = 0;            // preload timer 65536-16MHz/256/2Hz
+    TCCR1B |= (1 << CS12);    // 256 prescaler 
+    TCCR1B |= (1 << CS10); 
+    TIMSK1 |= (1 << TOIE1);   // enable timer overflow interrupt
+    interrupts();             // enable all interrupts
+  }
   attachInterrupt(digitalPinToInterrupt(interruptPinMotionDetect), interruptMotionDetector, RISING);
     
 }
@@ -184,28 +192,51 @@ void interruptMotionDetector(){
 
 
 void loop() {
-    dataPacket t_DataPacket_Loop;
-    dataPacketEncoded t_dataPacketEncoded;
-    
-   if(interruptHappened){
-    //radio.stopListening();
-    collectAndSendSensorData();
-    interruptHappened = false;
+    if(energySaving == true {
+        long start;
+        long dauer;
+        start = millis();
+        
+         radio.powerUp();
+         collectAndSendSensorData();
+         radio.powerDown();
+         
+         dauer = millis() - start;
+         Serial.print("Dauer: ");
+         Serial.print(dauer);
+         Serial.println(" ms");
+         delay(400);
+          
+         for(int i = 0; i < 8; i++)
+         {
+           LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+         }
+            
+    }else{
+        dataPacket t_DataPacket_Loop;
+        dataPacketEncoded t_dataPacketEncoded;
+        
+       if(interruptHappened){
+        //radio.stopListening();
+        collectAndSendSensorData();
+        interruptHappened = false;
+       }
+        
+        while( radio.available()){
+          radio.read( &t_dataPacketEncoded.message, sizeof(t_dataPacketEncoded.message) );
+          t_DataPacket_Loop = decodingData(t_dataPacketEncoded);
+          Serial.print("Paket erhalten: \t");
+          ausgabeDataPacket(t_DataPacket_Loop);
+          processData(t_DataPacket_Loop);
+        }
    }
-    
-    while( radio.available()){
-      radio.read( &t_dataPacketEncoded.message, sizeof(t_dataPacketEncoded.message) );
-      t_DataPacket_Loop = decodingData(t_dataPacketEncoded);
-      Serial.print("Paket erhalten: \t");
-      ausgabeDataPacket(t_DataPacket_Loop);
-      processData(t_DataPacket_Loop);
-    }
 }
 
 void collectAndSendSensorData(){
-  radio.stopListening();
-  delay(100);
-
+  if{energySaving == false){
+    radio.stopListening();
+    delay(100);
+  }
   timeId++;
   EEPROMWritelong(addressTimeId, timeId);
   
@@ -225,9 +256,10 @@ void collectAndSendSensorData(){
     sendDataPacket(createSensorDataPacket(getAndResetMotionSensor(), 5));
   }
   
-  
-  delay(100);
-  radio.startListening();
+  f{energySaving == false){
+    delay(100);
+    radio.startListening();
+  }
 }
 
 void getTemperatureHumidty(){  
@@ -235,9 +267,10 @@ void getTemperatureHumidty(){
   temperatur = dht.readTemperature();  
 }
 void getLightIntensity(){  
-  //Serial.print("Lux: \t");
+  LightSensor.begin(BH1750_ONE_TIME_HIGH_RES_MODE);
+  delay(125);
   lux = LightSensor.readLightLevel(); 
-  //Serial.println(lux);
+  LightSensor.powerDown();
 }
 boolean getAndResetMotionSensor(){ 
   boolean motionSensor = motion;

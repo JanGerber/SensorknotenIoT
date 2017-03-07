@@ -49,6 +49,9 @@
 <layer number="53" name="tGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
@@ -69,12 +72,29 @@
 <layer number="107" name="Crop" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="108" name="tplace-old" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="109" name="ref-old" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="110" name="fp0" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="111" name="LPC17xx" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="112" name="tSilk" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="113" name="IDFDebug" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="116" name="Patch_BOT" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="121" name="_tsilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="122" name="_bsilk" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="123" name="tTestmark" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="124" name="bTestmark" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="125" name="_tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="126" name="_bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="127" name="_tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="128" name="_bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="129" name="Mask" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="131" name="tAdjust" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="132" name="bAdjust" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="144" name="Drill_legend" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="150" name="Notes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="151" name="HeatSink" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="152" name="_bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="153" name="FabDoc1" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="154" name="FabDoc2" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="155" name="FabDoc3" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="199" name="Contour" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="200" name="200bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="201" name="201bmp" color="7" fill="1" visible="yes" active="yes"/>
@@ -101,9 +121,19 @@
 <layer number="222" name="222bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="223" name="223bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="224" name="224bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="225" name="225bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="226" name="226bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="227" name="227bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="228" name="228bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="229" name="229bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="230" name="230bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="231" name="231bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="248" name="Housing" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="249" name="Edge" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="250" name="Descript" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="251" name="SMDround" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="254" name="cooling" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="255" name="routoute" color="7" fill="1" visible="yes" active="yes"/>
 </layers>
 <schematic xreflabel="%F%N/%S.%C%R" xrefpart="/%S.%C%R">
 <libraries>
@@ -4771,8 +4801,63 @@ distributor RS Components</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="SparkFun-Aesthetics">
+<description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
+In this library you'll find non-functional items- supply symbols, logos, notations, frame blocks, etc.&lt;br&gt;&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
+&lt;br&gt;&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="FR-A4L">
+<rectangle x1="178.7652" y1="0" x2="179.3748" y2="20.32" layer="94"/>
+<rectangle x1="225.7552" y1="-26.67" x2="226.3648" y2="67.31" layer="94" rot="R90"/>
+<wire x1="225.29" y1="-0.1" x2="225.29" y2="5.08" width="0.1016" layer="94"/>
+<wire x1="225.29" y1="5.08" x2="273.05" y2="5.08" width="0.1016" layer="94"/>
+<wire x1="225.29" y1="5.08" x2="179.07" y2="5.08" width="0.1016" layer="94"/>
+<wire x1="179.07" y1="10.16" x2="225.29" y2="10.16" width="0.1016" layer="94"/>
+<wire x1="225.29" y1="10.16" x2="273.05" y2="10.16" width="0.1016" layer="94"/>
+<wire x1="179.07" y1="15.24" x2="273.05" y2="15.24" width="0.1016" layer="94"/>
+<wire x1="225.29" y1="5.08" x2="225.29" y2="10.16" width="0.1016" layer="94"/>
+<wire x1="179.07" y1="19.05" x2="179.07" y2="20.32" width="0.6096" layer="94"/>
+<wire x1="179.07" y1="20.32" x2="180.34" y2="20.32" width="0.6096" layer="94"/>
+<text x="181.61" y="11.43" size="2.54" layer="94" font="vector">&gt;DRAWING_NAME</text>
+<text x="181.61" y="6.35" size="2.286" layer="94" font="vector">&gt;LAST_DATE_TIME</text>
+<text x="195.58" y="1.27" size="2.54" layer="94" font="vector">&gt;SHEET</text>
+<text x="181.61" y="1.27" size="2.54" layer="94" font="vector">Sheet:</text>
+<text x="181.61" y="16.51" size="2.54" layer="94" font="vector">&gt;CNAME</text>
+<text x="226.16" y="1.27" size="2.54" layer="94" font="vector">Rev:</text>
+<text x="226.26" y="6.35" size="2.54" layer="94" font="vector">&gt;DESIGNER</text>
+<text x="234.92" y="1.17" size="2.54" layer="94" font="vector">&gt;CREVISION</text>
+<frame x1="-3.81" y1="-3.81" x2="276.86" y2="182.88" columns="8" rows="5" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="FRAME-A4L" prefix="FRAME">
+<description>&lt;b&gt;Schematic Frame-European Format&lt;/b&gt;
+&lt;br&gt;&lt;br&gt;
+Standard A4 size frame in Landscape</description>
+<gates>
+<gate name="G$1" symbol="FR-A4L" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
+<attribute name="CNAME" value="Studienarbeit 2016/2017"/>
+<attribute name="CREVISION" value="3.5"/>
+<attribute name="DESIGNER" value="Jan G. &amp; David P."/>
 </attributes>
 <variantdefs>
 </variantdefs>
@@ -4797,10 +4882,12 @@ distributor RS Components</description>
 <part name="ARDUINO-PRO-MINI" library="diy-modules" deviceset="ARDUINO-PRO-MINI-*#NP" device="" technology="5.0V" value=""/>
 <part name="IN-5V" library="pinhead" deviceset="PINHD-1X2" device=""/>
 <part name="OUT-3.3V" library="pinhead" deviceset="PINHD-1X2" device=""/>
+<part name="FRAME1" library="SparkFun-Aesthetics" deviceset="FRAME-A4L" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
+<text x="107.95" y="-31.75" size="2.54" layer="94">SensorknotenIoT Arduino Pro Mini</text>
 </plain>
 <instances>
 <instance part="NRF24L01+" gate="G$1" x="-35.56" y="38.1" rot="R180"/>
@@ -4817,8 +4904,15 @@ distributor RS Components</description>
 <instance part="S1" gate="1" x="71.12" y="106.68" rot="R270"/>
 <instance part="REED-SCHALTER1" gate="G$1" x="48.26" y="116.84" rot="R90"/>
 <instance part="ARDUINO-PRO-MINI" gate="G$1" x="63.5" y="38.1"/>
-<instance part="IN-5V" gate="G$1" x="109.22" y="-27.94"/>
-<instance part="OUT-3.3V" gate="G$1" x="114.3" y="-25.4" rot="R180"/>
+<instance part="IN-5V" gate="G$1" x="111.76" y="-7.62"/>
+<instance part="OUT-3.3V" gate="G$1" x="121.92" y="-5.08" rot="R180"/>
+<instance part="FRAME1" gate="G$1" x="-73.66" y="-43.18" smashed="yes">
+<attribute name="LAST_DATE_TIME" x="107.95" y="-36.83" size="2.286" layer="94" font="vector"/>
+<attribute name="SHEET" x="121.92" y="-41.91" size="2.54" layer="94" font="vector"/>
+<attribute name="CNAME" x="107.95" y="-26.67" size="2.54" layer="94" font="vector"/>
+<attribute name="DESIGNER" x="152.6" y="-36.83" size="2.54" layer="94" font="vector"/>
+<attribute name="CREVISION" x="161.26" y="-42.01" size="2.54" layer="94" font="vector"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -4846,9 +4940,9 @@ distributor RS Components</description>
 <segment>
 <pinref part="ARDUINO-PRO-MINI" gate="G$1" pin="VCC"/>
 <wire x1="81.28" y1="43.18" x2="96.52" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="43.18" x2="96.52" y2="-25.4" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="43.18" x2="96.52" y2="-5.08" width="0.1524" layer="91"/>
 <pinref part="IN-5V" gate="G$1" pin="1"/>
-<wire x1="96.52" y1="-25.4" x2="106.68" y2="-25.4" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="-5.08" x2="109.22" y2="-5.08" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="43.18" x2="96.52" y2="88.9" width="0.1524" layer="91"/>
 <junction x="96.52" y="43.18"/>
 <pinref part="R2" gate="G$1" pin="1"/>
@@ -4869,8 +4963,8 @@ distributor RS Components</description>
 <net name="GND" class="0">
 <segment>
 <pinref part="OUT-3.3V" gate="G$1" pin="1"/>
-<wire x1="116.84" y1="-27.94" x2="142.24" y2="-27.94" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="-27.94" x2="142.24" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="124.46" y1="-7.62" x2="142.24" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="-7.62" x2="142.24" y2="12.7" width="0.1524" layer="91"/>
 <pinref part="BMP180" gate="A" pin="5"/>
 <wire x1="142.24" y1="12.7" x2="162.56" y2="12.7" width="0.1524" layer="91"/>
 <pinref part="BH1750" gate="A" pin="5"/>
@@ -4899,8 +4993,8 @@ distributor RS Components</description>
 <wire x1="93.98" y1="91.44" x2="93.98" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="48.26" x2="81.28" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="IN-5V" gate="G$1" pin="2"/>
-<wire x1="106.68" y1="-27.94" x2="93.98" y2="-27.94" width="0.1524" layer="91"/>
-<wire x1="93.98" y1="-27.94" x2="93.98" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="-7.62" x2="93.98" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="93.98" y1="-7.62" x2="93.98" y2="12.7" width="0.1524" layer="91"/>
 <junction x="93.98" y="48.26"/>
 <pinref part="ARDUINO-PRO-MINI" gate="G$1" pin="GND.3"/>
 <wire x1="93.98" y1="12.7" x2="93.98" y2="48.26" width="0.1524" layer="91"/>
@@ -4936,8 +5030,8 @@ distributor RS Components</description>
 <wire x1="162.56" y1="15.24" x2="139.7" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="15.24" x2="139.7" y2="5.08" width="0.1524" layer="91"/>
 <pinref part="OUT-3.3V" gate="G$1" pin="2"/>
-<wire x1="139.7" y1="5.08" x2="139.7" y2="-25.4" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="-25.4" x2="116.84" y2="-25.4" width="0.1524" layer="91"/>
+<wire x1="139.7" y1="5.08" x2="139.7" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="139.7" y1="-5.08" x2="124.46" y2="-5.08" width="0.1524" layer="91"/>
 <pinref part="BH1750" gate="A" pin="4"/>
 <wire x1="162.56" y1="43.18" x2="139.7" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="139.7" y1="43.18" x2="139.7" y2="15.24" width="0.1524" layer="91"/>

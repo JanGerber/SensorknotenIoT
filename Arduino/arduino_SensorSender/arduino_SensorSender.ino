@@ -39,6 +39,9 @@
   const byte interruptPinMotionDetect = 3;
   boolean motion;
   boolean firstTimeMotion;
+  //Bodenfeuchtigkeit
+  boolean soilMoistureDigital;
+  float soilMoistureAnalog;
 
   // NRF24L01
   RF24 radio(9,10);
@@ -100,7 +103,6 @@ void setup() {
   
   //DHT22
   dht.begin();
-  LightSensor.begin();
   lux = NULL;
 
   if(!bmp.begin())
@@ -201,9 +203,10 @@ void getTemperatureHumidty(){
   temperatur = dht.readTemperature();  
 }
 void getLightIntensity(){  
-  //Serial.print("Lux: \t");
+  LightSensor.begin(BH1750_ONE_TIME_HIGH_RES_MODE);
+  delay(125);
   lux = LightSensor.readLightLevel(); 
-  //Serial.println(lux);
+  LightSensor.powerDown();
 }
 boolean getAndResetMotionSensor(){ 
   boolean motionSensor = motion;
