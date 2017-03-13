@@ -65,6 +65,7 @@
   #define REED_CONTACT_WITHINT_PIN 2
   boolean firstTimeConntectWithInt;
   boolean reedContactWithInterrupt;
+  boolean interruptHappendReedContact;
 
 
   // NRF24L01
@@ -106,6 +107,7 @@
   };
 
 
+  //
   long startTime; // millis-Wert beim ersten Drücken der Taste
   long duration;  // Variable für die Dauer
   int countTimer = 0;
@@ -151,6 +153,8 @@ void setup() {
   //Reed Kontakt
   firstTimeConntectNoInt = false;
   firstTimeConntectWithInt = false;
+  interruptHappendReedContact = false;
+  pinMode(REED_CONTACT_WITHINT_PIN, INPUT);
 
   Serial.println("init Radio");
   //nRF24L01
@@ -220,10 +224,17 @@ void interruptMotionDetector(){
   firstTimeMotion = true;
 }
 void interruptContactDetector(){
-  Serial.println("Interrupt");
-  detachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN));   
-  reedContactWithInterrupt = !reedContactWithInterrupt;
-  firstTimeConntectWithInt = true;
+  
+  boolean firstRead = digitalRead(REED_CONTACT_WITHINT_PIN);
+  delay(10);
+  boolean secondRead = digitalRead(REED_CONTACT_WITHINT_PIN);
+  
+  if(firstRead == secondRead){
+    interruptHappendReedContact = true;
+    detachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN));   
+    reedContactWithInterrupt = firstRead;
+    firstTimeConntectWithInt = true;
+  }
 }
 
 
@@ -350,15 +361,16 @@ void getOneWireTemperature(){
 }
 void getReedContactNoInt(){  
    reedContactNoInterrupt = digitalRead(REED_CONTACT_NOINT_PIN);
-   if(true == reedContactNoInterrupt){
+   if(false == reedContactNoInterrupt){
     firstTimeConntectNoInt = true;  
    }
 }
 boolean getAndResetReedContactSensor(){ 
-  boolean reedContactSensor = reedContactWithInterrupt;
-  reedContactWithInterrupt = !reedContactWithInterrupt;
-  attachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN), interruptContactDetector, CHANGE);
-  return reedContactSensor;
+  if(interruptHappendReedContact){
+    interruptHappendReedContact = false;
+    attachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN), interruptContactDetector, CHANGE);
+  }
+  return reedContactWithInterrupt;
 }
 
 
