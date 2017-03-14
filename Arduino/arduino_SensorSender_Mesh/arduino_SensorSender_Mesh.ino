@@ -22,8 +22,10 @@
   unsigned int arduinoId = 9999;
 
   //Energiesparen
-  const boolean energySaving = true;
-  
+  #define ENERGY_SAVING true 
+  #define SLEEP_TIME 8 //mal 8s
+  #define RADIO_RETRY_ATTEMPTS 6
+  #define DEBUG_AUSGABE true
 
   //DHT22
   #define DHTPIN 4     // what pin we're connected to
@@ -41,7 +43,7 @@
   boolean bpm180Connected;
 
   //Bewegungsmelder
-  const byte interruptPinMotionDetect = 3;
+  #define INTERRUPT_PIN_MOTION_DETECT 3
   boolean motion;
   boolean firstTimeMotion;
 
@@ -68,20 +70,20 @@
   boolean interruptHappendReedContact;
 
 
+
   // NRF24L01
   RF24 radio(9,10);
-  // Example below using pipe5 for writing
-  uint8_t addresses[][6] = {"1Node","2Node"};
+  uint8_t addresses[][6] = {"1Node"}; //Pipe
+
    
-  //char receivePayload[32];
   unsigned long timeId;
   long addressTimeId;
 
   unsigned int messageId;
   int addressMessageId;
 
-  const int SIZEBLACKLIST = 50;
-  unsigned long blacklist[SIZEBLACKLIST];
+  #define SIZE_OF_BLACKLIST 50
+  unsigned long blacklist[SIZE_OF_BLACKLIST];
   int listPointer = 0;
   
 
@@ -101,7 +103,7 @@
     unsigned int messageId;
     sensorData data; 
   };
-    //Mesh Daten Paket
+  //Mesh Daten Paket
   struct dataPacketEncoded{
     char message[28];
   };
@@ -110,13 +112,16 @@
   //
   long startTime; // millis-Wert beim ersten Drücken der Taste
   long duration;  // Variable für die Dauer
-  int countTimer = 0;
 
+  //Normalbetrieb kein Energiesparmodus
+  int countTimer = 0; 
   boolean interruptHappened;
 
   
-void setup() {  
-  Serial.begin(9600);  
+void setup() { 
+  #if DEBUG_AUSGABE 
+    Serial.begin(9600);  
+  #endif
 /*
   EEPROMWriteInt(12, 100);
   delay(500);
@@ -131,6 +136,7 @@ void setup() {
   dht.begin();
   lux = NULL;
 
+  //BMP 180
   if(!bmp.begin())
   {
     bpm180Connected = false; 
@@ -156,8 +162,9 @@ void setup() {
   interruptHappendReedContact = false;
   pinMode(REED_CONTACT_WITHINT_PIN, INPUT);
 
-  Serial.println("init Radio");
-  //nRF24L01
+  #if DEBUG_AUSGABE 
+    Serial.println("init Radio");
+  #endif
 
   initRadio();
   
@@ -171,16 +178,17 @@ void setup() {
   addressTimeId = 1;
   timeId = EEPROMReadlong(addressTimeId);
   delay(1000);
-
-  Serial.print("timeId ID: \t");
-  Serial.println(timeId);
   addressMessageId = 8;
- // addressMessageId += sizeof(addressMessageId);
   messageId = (int) EEPROMReadInt(addressMessageId);
-  Serial.print("Message ID: \t");
-  Serial.println(messageId);
+  
+  #if DEBUG_AUSGABE 
+    Serial.print("timeId ID: \t");
+    Serial.println(timeId);
+    Serial.print("Message ID: \t");
+    Serial.println(messageId);
+  #endif
 
-  if(energySaving == false){
+  #if !ENERGY_SAVING 
     collectAndSendSensorData();
     radio.startListening();
   
@@ -194,9 +202,9 @@ void setup() {
     TCCR1B |= (1 << CS10); 
     TIMSK1 |= (1 << TOIE1);   // enable timer overflow interrupt
     interrupts();             // enable all interrupts
-  }
+  #endif
   
-  attachInterrupt(digitalPinToInterrupt(interruptPinMotionDetect), interruptMotionDetector, RISING);
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN_MOTION_DETECT), interruptMotionDetector, RISING);
   attachInterrupt(digitalPinToInterrupt(REED_CONTACT_WITHINT_PIN), interruptContactDetector, CHANGE);
     
 }
@@ -219,6 +227,7 @@ ISR(TIMER1_OVF_vect)          // timer compare interrupt service routine
     
   }
 }
+
 void interruptMotionDetector(){  
   motion = true;
   firstTimeMotion = true;
@@ -240,27 +249,33 @@ void interruptContactDetector(){
 
 
 void loop() {
-    if(energySaving == true) {
-        long start;
-        long dauer;
-        start = millis();
+    #if ENERGY_SAVING 
+        #if DEBUG_AUSGABE 
+            long start;
+            long dauer;
+            start = millis();
+        #endif
+                
+        radio.powerUp();
+        collectAndSendSensorData();
+        radio.powerDown();
         
-         radio.powerUp();
-         collectAndSendSensorData();
-         radio.powerDown();
-         
-         dauer = millis() - start;
-         Serial.print("Dauer: ");
-         Serial.print(dauer);
-         Serial.println(" ms");
-         delay(400);
-          
-         for(int i = 0; i < 2; i++)
-         {
-           LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
-         }
+        #if DEBUG_AUSGABE 
+           dauer = millis() - start;
+           Serial.print("Dauer: ");
+           Serial.print(dauer);
+           Serial.println(" ms");
+           delay(400);
+        #else
+           delay(15);
+        #endif
+        
+        for(int i = 0; i < SLEEP_TIME; i++)
+        {
+         LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+        }
             
-    }else{
+    #else
         dataPacket t_DataPacket_Loop;
         dataPacketEncoded t_dataPacketEncoded;
         
@@ -273,18 +288,21 @@ void loop() {
         while( radio.available()){
           radio.read( &t_dataPacketEncoded.message, sizeof(t_dataPacketEncoded.message) );
           t_DataPacket_Loop = decodingData(t_dataPacketEncoded);
-          Serial.print("Paket erhalten: \t");
-          ausgabeDataPacket(t_DataPacket_Loop);
+          #if DEBUG_AUSGABE 
+            Serial.print("Paket erhalten: \t");
+            ausgabeDataPacket(t_DataPacket_Loop);
+          #endif
           processData(t_DataPacket_Loop);
         }
-   }
+   #endif
 }
 
 void collectAndSendSensorData(){
-  if(energySaving == false){
+  #if !ENERGY_SAVING 
     radio.stopListening();
     delay(100);
-  }
+  #endif
+  
   timeId++;
   EEPROMWritelong(addressTimeId, timeId);
   
@@ -309,23 +327,23 @@ void collectAndSendSensorData(){
     sendDataPacket(createSensorDataPacket(soilMoistureDigital, 7));
   }
   getOneWireTemperature();
-  for(int i = 0; i < oneWireDallas.getDeviceCount() && i <= 99 ;i++){
+  for(int i = 100; i < oneWireDallas.getDeviceCount() && i <= 199 ;i++){
     
-    sendDataPacket(createSensorDataPacket(oneWireDallas.getTempCByIndex(i), (100 + i) ));
+    sendDataPacket(createSensorDataPacket(oneWireDallas.getTempCByIndex(i), (i) ));
   }
   
   getReedContactNoInt();
-  if(true == firstTimeConntectNoInt){
+  if(false == firstTimeConntectNoInt){
     sendDataPacket(createSensorDataPacket(reedContactNoInterrupt, 8));
   }
   if (true == firstTimeConntectWithInt){
     sendDataPacket(createSensorDataPacket(getAndResetReedContactSensor(), 9));
   }
   
-  if(energySaving == false){
+  #if !ENERGY_SAVING
     delay(100);
     radio.startListening();
-  }
+  #endif
 }
 
 void getTemperatureHumidty(){  
@@ -348,8 +366,6 @@ void getPressure(){
   sensors_event_t event;
   bmp.getEvent(&event);
   pressure = event.pressure; 
-  //Serial.print("Pressure: \t");
-  // Serial.println(pressure);
 }
 void getSoilMoisture(){  
   soilMoistureAnalog = analogRead(soilMoistureAnalogPin); 
@@ -398,15 +414,17 @@ dataPacket createSensorDataPacket(float value, int unit){
 }
 
 void sendDataPacket(dataPacket t_dataPacket){
-  Serial.print("Paket senden: \t \t");
-  ausgabeDataPacket(t_dataPacket);
+  #if DEBUG_AUSGABE 
+    Serial.print("Paket senden: \t \t");
+    ausgabeDataPacket(t_dataPacket);
+  #endif
   
   dataPacketEncoded encodedMessage;
   encodedMessage = encodiereDaten(t_dataPacket);
   radio.SensorknotenIoT_resetRegister();
 
   radio.write( &encodedMessage.message, sizeof(encodedMessage.message));
-  for(int retry = 0; retry <= 5; retry++){
+  for(int retry = 0; retry <= RADIO_RETRY_ATTEMPTS; retry++){
     radio.write( &encodedMessage.message, sizeof(encodedMessage.message));
     //radio.reUseTX();
    delayMicroseconds(160);
@@ -445,25 +463,29 @@ void processData(dataPacket t_dataPacket){
          t_dataPacket.lastHopAddr = arduinoId;
          sendDataPacket(t_dataPacket);
      }else{
-        //Message verwefen
-        Serial.println("Message verworfen");
+        #if DEBUG_AUSGABE 
+          //Message verwefen
+          Serial.println("Message verworfen");
+        #endif
      }    
   }else{
-    //Arduino ist Empfaenger
-    Serial.print("Arduino ist Empfaenger: \t");
-    ausgabeDataPacket(t_dataPacket);
+    #if DEBUG_AUSGABE 
+      //Arduino ist Empfaenger
+      Serial.print("Arduino ist Empfaenger: \t");
+      ausgabeDataPacket(t_dataPacket);
+    #endif
   }
 }
 
 void decrementPoiter() {
-    if(listPointer < SIZEBLACKLIST )
+    if(listPointer < SIZE_OF_BLACKLIST )
         listPointer++;
     else
         listPointer=0;       
 }
 
 boolean compareToList(unsigned long uniqueMessageId){
-   for (int i=0; i<  (SIZEBLACKLIST - 1); i++) {
+   for (int i=0; i<  (SIZE_OF_BLACKLIST - 1); i++) {
         if (uniqueMessageId==blacklist[i])
             return true;
     }
@@ -581,8 +603,10 @@ void ausgabeDataPacket(dataPacket t_dataPacket){
       radio.setCRCLength(RF24_CRC_16);
       radio.openWritingPipe(addresses[0]);
       radio.openReadingPipe(1,addresses[0]); //1
-      printf_begin();
-      radio.printDetails();
+      #if DEBUG_AUSGABE 
+        printf_begin();
+        radio.printDetails();
+      #endif
   }
 
 
