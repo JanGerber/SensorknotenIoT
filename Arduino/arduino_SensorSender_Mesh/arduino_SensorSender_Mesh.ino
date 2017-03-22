@@ -25,7 +25,7 @@
   #define ENERGY_SAVING true 
   #define SLEEP_TIME 8 //mal 8s
   #define RADIO_RETRY_ATTEMPTS 6
-  #define DEBUG_AUSGABE true
+  #define DEBUG_AUSGABE false
 
   //DHT22
   #define DHTPIN 4     // what pin we're connected to
@@ -327,9 +327,8 @@ void collectAndSendSensorData(){
     sendDataPacket(createSensorDataPacket(soilMoistureDigital, 7));
   }
   getOneWireTemperature();
-  for(int i = 100; i < oneWireDallas.getDeviceCount() && i <= 199 ;i++){
-    
-    sendDataPacket(createSensorDataPacket(oneWireDallas.getTempCByIndex(i), (i) ));
+  for(int i = 100; i < oneWireDallas.getDeviceCount() + 100 && i <= 199 ;i++){
+    sendDataPacket(createSensorDataPacket(oneWireDallas.getTempCByIndex(i-100), (i) ));
   }
   
   getReedContactNoInt();
@@ -352,7 +351,7 @@ void getTemperatureHumidty(){
 }
 void getLightIntensity(){  
   LightSensor.begin(BH1750_ONE_TIME_HIGH_RES_MODE);
-  delay(125);
+  delay(200);
   lux = LightSensor.readLightLevel(); 
   LightSensor.powerDown();
 }
