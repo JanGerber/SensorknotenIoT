@@ -24,12 +24,12 @@
   //Energiesparen
   #define ENERGY_SAVING true 
   #define SLEEP_TIME 8 //mal 8s
-  #define RADIO_RETRY_ATTEMPTS 6
-  #define DEBUG_AUSGABE false
+  #define RADIO_RETRY_ATTEMPTS 7
+  #define DEBUG_AUSGABE true
 
   //DHT22
   #define DHTPIN 4     // what pin we're connected to
-  #define DHTTYPE DHT22  // DHT 22  (AM2302)
+  #define DHTTYPE DHT11  // DHT 22  (AM2302)
   DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
   float humidity;
   float temperatur;
@@ -367,7 +367,7 @@ void getPressure(){
   pressure = event.pressure; 
 }
 void getSoilMoisture(){  
-  soilMoistureAnalog = analogRead(soilMoistureAnalogPin); 
+  soilMoistureAnalog = (100 - ((100 / 1023.0) * analogRead(soilMoistureAnalogPin))); 
   soilMoistureDigital = digitalRead(soilMoistureDigitalPin);  
 }
 void getOneWireTemperature(){
